@@ -1,68 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Dokumenta\\Sistemi_baza_podataka\\DrugaFaza\\IznajmljivanjeVozila\\IznajmljivanjeVozila\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{E523DC5C-FC80-4A22-A69E-9E1EABEDACD4}|IznajmljivanjeVozila.csproj|d:\\dokumenta\\sistemi_baza_podataka\\drugafaza\\iznajmljivanjevozila\\iznajmljivanjevozila\\forme\\stetadodavanje.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{E523DC5C-FC80-4A22-A69E-9E1EABEDACD4}|IznajmljivanjeVozila.csproj|solutionrelative:forme\\stetadodavanje.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E523DC5C-FC80-4A22-A69E-9E1EABEDACD4}|IznajmljivanjeVozila.csproj|d:\\dokumenta\\sistemi_baza_podataka\\drugafaza\\iznajmljivanjevozila\\iznajmljivanjevozila\\forme\\formrezervacijadodavanje.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E523DC5C-FC80-4A22-A69E-9E1EABEDACD4}|IznajmljivanjeVozila.csproj|solutionrelative:forme\\formrezervacijadodavanje.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E523DC5C-FC80-4A22-A69E-9E1EABEDACD4}|IznajmljivanjeVozila.csproj|D:\\Dokumenta\\Sistemi_baza_podataka\\DrugaFaza\\IznajmljivanjeVozila\\IznajmljivanjeVozila\\forme\\formrezervacijadodavanje.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{E523DC5C-FC80-4A22-A69E-9E1EABEDACD4}|IznajmljivanjeVozila.csproj|solutionrelative:forme\\formrezervacijadodavanje.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "StetaDodavanje.cs [Design]",
-              "DocumentMoniker": "D:\\Dokumenta\\Sistemi_baza_podataka\\DrugaFaza\\IznajmljivanjeVozila\\IznajmljivanjeVozila\\Forme\\StetaDodavanje.cs",
-              "RelativeDocumentMoniker": "Forme\\StetaDodavanje.cs",
-              "ToolTip": "D:\\Dokumenta\\Sistemi_baza_podataka\\DrugaFaza\\IznajmljivanjeVozila\\IznajmljivanjeVozila\\Forme\\StetaDodavanje.cs [Design]",
-              "RelativeToolTip": "Forme\\StetaDodavanje.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-03T18:08:08.861Z",
-              "EditorCaption": " [Design]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "FormRezervacijaDodavanje.cs",
-              "DocumentMoniker": "D:\\Dokumenta\\Sistemi_baza_podataka\\DrugaFaza\\IznajmljivanjeVozila\\IznajmljivanjeVozila\\Forme\\FormRezervacijaDodavanje.cs",
-              "RelativeDocumentMoniker": "Forme\\FormRezervacijaDodavanje.cs",
-              "ToolTip": "D:\\Dokumenta\\Sistemi_baza_podataka\\DrugaFaza\\IznajmljivanjeVozila\\IznajmljivanjeVozila\\Forme\\FormRezervacijaDodavanje.cs",
-              "RelativeToolTip": "Forme\\FormRezervacijaDodavanje.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAuwBgAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-03T18:01:03.264Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "FormRezervacijaDodavanje.cs [Design]",
-              "DocumentMoniker": "D:\\Dokumenta\\Sistemi_baza_podataka\\DrugaFaza\\IznajmljivanjeVozila\\IznajmljivanjeVozila\\Forme\\FormRezervacijaDodavanje.cs",
-              "RelativeDocumentMoniker": "Forme\\FormRezervacijaDodavanje.cs",
-              "ToolTip": "D:\\Dokumenta\\Sistemi_baza_podataka\\DrugaFaza\\IznajmljivanjeVozila\\IznajmljivanjeVozila\\Forme\\FormRezervacijaDodavanje.cs [Design]",
-              "RelativeToolTip": "Forme\\FormRezervacijaDodavanje.cs [Design]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-03T18:00:38.038Z"
-            }
-          ]
-        }
-      ]
+      "DocumentGroups": []
     }
   ]
 }

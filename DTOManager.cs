@@ -103,22 +103,154 @@ namespace IznajmljivanjeVozila
             }
         }
 
-        public static void obrisiKorisnika(int id) //brisanje
+        private static int IzvrsiSQLZaKorisnika( //pomocna metoda za trajno brisanje korisnika, 
+            //jer prethodna metoda ga nije dobro brisala jer je on povezan u vise tabele i to je pravilo problem
+         ISession s,
+         string sql,
+         int idKorisnika)
         {
+            return s.CreateSQLQuery(sql)
+                .SetParameter("id", idKorisnika)
+                .ExecuteUpdate();
+        
+        }
+
+        public static bool ObrisiKorisnikaSvuda(
+    int idKorisnika)
+        {
+            using ISession s = DataLayer.GetSession();
+            using ITransaction t = s.BeginTransaction();
+
             try
             {
-                ISession s = DataLayer.GetSession();
+                // Vožnje više ne smeju da pokazuju na rezervacije korisnika.
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"UPDATE VOZNJA
+              SET ID_REZERVACIJE = NULL
+              WHERE ID_REZERVACIJE IN
+              (
+                  SELECT ID_REZERVACIJE
+                  FROM REZERVACIJA
+                  WHERE ID_K = :id
+              )",
+                    idKorisnika
+                );
 
-                IznajmljivanjeVozila.Entiteti.Korisnik k = s.Load<IznajmljivanjeVozila.Entiteti.Korisnik>(id);
+                // Brišemo rezervacije koje je napravio korisnik.
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"DELETE FROM REZERVACIJA
+              WHERE ID_K = :id",
+                    idKorisnika
+                );
 
-                s.Delete(k);
-                s.Flush();
+                // Ako je korisnik fizičko lice i bio je vozač
+                // u nekoj tuđoj rezervaciji, uklanjamo vezu ka njemu.
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"UPDATE REZERVACIJA
+              SET ID_VOZACA = NULL
+              WHERE ID_VOZACA IN
+              (
+                  SELECT ID_FL
+                  FROM FIZICKA_LICA
+                  WHERE ID_KORISNIKA = :id
+              )",
+                    idKorisnika
+                );
 
-                s.Close();
+                // Odvajamo vožnje od službenih vožnji tog lica.
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"UPDATE VOZNJA
+              SET SLUZBENA_VOZNJA = NULL
+              WHERE SLUZBENA_VOZNJA IN
+              (
+                  SELECT ID_S_VOZNJE
+                  FROM SLUZBENA_VOZNJA
+                  WHERE OVLASCENO_LICE IN
+                  (
+                      SELECT ID_FL
+                      FROM FIZICKA_LICA
+                      WHERE ID_KORISNIKA = :id
+                  )
+              )",
+                    idKorisnika
+                );
+
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"DELETE FROM SLUZBENA_VOZNJA
+              WHERE OVLASCENO_LICE IN
+              (
+                  SELECT ID_FL
+                  FROM FIZICKA_LICA
+                  WHERE ID_KORISNIKA = :id
+              )",
+                    idKorisnika
+                );
+
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"DELETE FROM KORISNIK_ULOGA
+              WHERE ID_KORISNIKA = :id",
+                    idKorisnika
+                );
+
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"DELETE FROM NACIN_PLACANJA
+              WHERE ID_KORISNIKA = :id",
+                    idKorisnika
+                );
+
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"DELETE FROM VERIFIKACIJA
+              WHERE ID_KORISNIKA = :id",
+                    idKorisnika
+                );
+
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"DELETE FROM PRAVNA_LICA
+              WHERE ID_KORISNIKA = :id",
+                    idKorisnika
+                );
+
+                IzvrsiSQLZaKorisnika(
+                    s,
+                    @"DELETE FROM FIZICKA_LICA
+              WHERE ID_KORISNIKA = :id",
+                    idKorisnika
+                );
+
+                int brojObrisanihKorisnika =
+                    IzvrsiSQLZaKorisnika(
+                        s,
+                        @"DELETE FROM KORISNIK
+                  WHERE ID_KORISNIKA = :id",
+                        idKorisnika
+                    );
+
+                t.Commit();
+
+                return brojObrisanihKorisnika > 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                if (t.IsActive)
+                {
+                    t.Rollback();
+                }
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ?? ex.Message,
+                    "Greška pri brisanju korisnika"
+                );
+
+                return false;
             }
         }
 
@@ -361,16 +493,15 @@ namespace IznajmljivanjeVozila
             }
         }
 
-
+        //PRETRAGA VOZILA
         public static List<PretrazenoVozilo> PretraziVozila(
             string marka,
             string model,
             string status,
             string tipKoriscenja,
             string namena,
-            string tipPogona,
-            string dopuna,
-            string tipGoriva)
+            string tipPogona
+           )
         {
             List<PretrazenoVozilo> vozila = new List<PretrazenoVozilo>();
 
@@ -401,22 +532,6 @@ namespace IznajmljivanjeVozila
                     rezultat = rezultat.Where(v => s.Query<HibridnoVozilo>().Any(h => h.IdVozila == v.IdVozila)).ToList();
                 else if (tipPogona == "Klasicno")
                     rezultat = rezultat.Where(v => s.Query<KlasicnoVozilo>().Any(k => k.IdVozila == v.IdVozila)).ToList();
-            }
-
-            if (!string.IsNullOrWhiteSpace(tipGoriva) && tipGoriva != "Svi")
-            {
-                rezultat = rezultat.Where(v =>
-                    s.Query<KlasicnoVozilo>()
-                     .Any(k => k.IdVozila == v.IdVozila && k.TipGoriva == tipGoriva)
-                ).ToList();
-            }
-
-            if (!string.IsNullOrWhiteSpace(dopuna) && dopuna != "Sve")
-            {
-                rezultat = rezultat.Where(v =>
-                    s.Query<PunjenjeIliTocenjeGoriva>()
-                     .Any(p => p.Vozilo.IdVozila == v.IdVozila && p.TipDopune == dopuna)
-                ).ToList();
             }
 
             foreach (Vozilo v in rezultat)
@@ -451,6 +566,8 @@ namespace IznajmljivanjeVozila
 
             return vozila;
         }
+
+        //KVAROVI VOZILA
         public static List<KvaroviView> VratiKvarove(int idVozila) //lista za sve kvarove izabranog vozila
         {
             List<KvaroviView> kvarovi = new List<KvaroviView>();
@@ -468,6 +585,7 @@ namespace IznajmljivanjeVozila
             return kvarovi;
         }
 
+        //SERVISI VOZILA
         public static List<ServisiView> VratiServise(int idVozila)//lista servisa za izabrano vozilo 
         {
             List<ServisiView> servisi = new List<ServisiView>();
@@ -485,6 +603,346 @@ namespace IznajmljivanjeVozila
             return servisi;
         }
 
+        private static void KopirajOsnovnePodatkeVozila(Vozilo vozilo, VoziloView dto) //pomoc za tipove pogona
+        {
+            vozilo.Registracija = dto.Registracija;
+            vozilo.VinBroj = dto.VinBr;
+            vozilo.Marka = dto.Marka;
+            vozilo.ModelVozila = dto.Model;
+            vozilo.GodProizvodnje = dto.GodProizvodnje;
+            vozilo.DatumNabavke = dto.DatumNabavke;
+            vozilo.Status = dto.Status;
+            vozilo.TipKoriscenja = dto.TipKoriscenja;
+            vozilo.BrSedista = dto.BrSedista;
+            vozilo.StanjeEnterijera = dto.StanjeEnterijera;
+            vozilo.StanjeEksterijera = dto.StanjeEksterijera;
+            vozilo.DodatnaOprema = dto.DodatnaOprema;
+        }
+
+        public static string VratiTipPogona(int idVozila) //za dugme za izmenu 
+        {
+            using ISession s = DataLayer.GetSession();
+
+            if (s.Query<ElektricnoVozilo>()
+                .Any(v => v.IdVozila == idVozila))
+                return "Elektricno";
+
+            if (s.Query<HibridnoVozilo>()
+                .Any(v => v.IdVozila == idVozila))
+                return "Hibridno";
+
+            if (s.Query<KlasicnoVozilo>()
+                .Any(v => v.IdVozila == idVozila))
+                return "Klasicno";
+
+            return "Nepoznato";
+        }
+
+
+        //HIBRIDNO VOZILO
+        public static List<HibridnoVoziloView> VratiHVozila() //citanje
+        {
+            List<HibridnoVoziloView> vozila = new List<HibridnoVoziloView>();
+
+            ISession s = DataLayer.GetSession();
+
+            foreach (HibridnoVozilo hv in s.Query<HibridnoVozilo>())
+            {
+                vozila.Add(new HibridnoVoziloView(hv));
+            }
+
+            s.Close();
+
+            return vozila;
+        }
+
+        public static bool DodajHVozilo(HibridnoVoziloView hv) //dodavanje
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                HibridnoVozilo novoVozilo = new HibridnoVozilo
+                {
+                    IdVozila = hv.Id,
+                    KapacitetBat = hv.KapacitetBat,
+                    TipHibridnogVozila = hv.TipHibridnogVozila
+                };
+
+                KopirajOsnovnePodatkeVozila(novoVozilo, hv);
+
+                ITransaction t = s.BeginTransaction();
+                s.Save(novoVozilo);
+                t.Commit();
+
+                s.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Exception trenutna = ex;
+
+                while (trenutna.InnerException != null)
+                {
+                    trenutna = trenutna.InnerException;
+                }
+
+                MessageBox.Show(
+                    trenutna.Message,
+                    "Greška pri dodavanju vozila",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
+                return false;
+            }
+        }
+
+        public static HibridnoVoziloView VratiHVozilo(int id) //koga smo izabrali za izmenu
+        {
+            ISession s = DataLayer.GetSession();
+
+            HibridnoVozilo v = s.Load<HibridnoVozilo>(id);
+            HibridnoVoziloView hv = new HibridnoVoziloView(v);
+
+            s.Close();
+
+            return hv;
+        }
+
+        public static bool IzmeniHVozilo(HibridnoVoziloView v)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                HibridnoVozilo vozilo = s.Load<HibridnoVozilo>(v.Id);
+
+                KopirajOsnovnePodatkeVozila(vozilo, v);
+
+                vozilo.KapacitetBat = v.KapacitetBat;
+                vozilo.TipHibridnogVozila = v.TipHibridnogVozila;
+
+                ITransaction t = s.BeginTransaction();
+
+                s.Update(vozilo);
+                t.Commit();
+
+                s.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
+
+        //KLASICNO VOZILO
+        public static List<KlasicnoVoziloView> VratiKVozila() //citanje
+        {
+            List<KlasicnoVoziloView> vozila = new List<KlasicnoVoziloView>();
+
+            ISession s = DataLayer.GetSession();
+
+            foreach (KlasicnoVozilo kv in s.Query<KlasicnoVozilo>())
+            {
+                vozila.Add(new KlasicnoVoziloView(kv));
+            }
+
+            s.Close();
+
+            return vozila;
+        }
+
+        public static bool DodajKVozilo(KlasicnoVoziloView kv) //dodavanje
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                KlasicnoVozilo novoVozilo = new KlasicnoVozilo
+                {
+                    IdVozila = kv.Id,
+                    Zapremina = kv.Zapremina,
+                    ProsecnaPotrosnja = kv.ProsecnaPotrosnja,
+                    TipGoriva = kv.TipGoriva
+                };
+
+                KopirajOsnovnePodatkeVozila(novoVozilo, kv);
+
+                ITransaction t = s.BeginTransaction();
+                s.Save(novoVozilo);
+                t.Commit();
+
+                s.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Exception trenutna = ex;
+
+                while (trenutna.InnerException != null)
+                {
+                    trenutna = trenutna.InnerException;
+                }
+
+                MessageBox.Show(
+                    trenutna.Message,
+                    "Greška pri dodavanju vozila",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
+                return false;
+            }
+        }
+
+        public static KlasicnoVoziloView VratiKVozilo(int id) //koga smo izabrali za izmenu
+        {
+            ISession s = DataLayer.GetSession();
+
+            KlasicnoVozilo v = s.Load<KlasicnoVozilo>(id);
+            KlasicnoVoziloView kv = new KlasicnoVoziloView(v);
+
+            s.Close();
+
+            return kv;
+        }
+
+        public static bool IzmeniKVozilo(KlasicnoVoziloView v)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                KlasicnoVozilo vozilo = s.Load<KlasicnoVozilo>(v.Id);
+
+                KopirajOsnovnePodatkeVozila(vozilo, v);
+
+                vozilo.Zapremina = v.Zapremina;
+                vozilo.ProsecnaPotrosnja = v.ProsecnaPotrosnja;
+                vozilo.TipGoriva = v.TipGoriva;
+
+                ITransaction t = s.BeginTransaction();
+
+                s.Update(vozilo);
+                t.Commit();
+
+                s.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
+
+        //ELEKTRICNO VOZILO
+        public static List<ElektricnoVoziloView> VratiEVozila() //citanje
+        {
+            List<ElektricnoVoziloView> vozila = new List<ElektricnoVoziloView>();
+
+            ISession s = DataLayer.GetSession();
+
+            foreach (ElektricnoVozilo ev in s.Query<ElektricnoVozilo>())
+            {
+                vozila.Add(new ElektricnoVoziloView(ev));
+            }
+
+            s.Close();
+
+            return vozila;
+        }
+
+        public static bool DodajEVozilo(ElektricnoVoziloView ev) //dodavanje
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                ElektricnoVozilo novoVozilo = new ElektricnoVozilo
+                {
+                    IdVozila = ev.Id,
+                    KapacitetBaterije = ev.KapacitetBat,
+                    NivoNapunjenosti = ev.NivoNapunjenosti,
+                    TipPunjenja = ev.TipPunjenja,
+                    Autonomija = ev.Autonomija,
+                    BrCiklusaPunjenja = ev.BrCiklusaPunjenja
+                };
+
+                KopirajOsnovnePodatkeVozila(novoVozilo, ev);
+
+                ITransaction t = s.BeginTransaction();
+                s.Save(novoVozilo);
+                t.Commit();
+
+                s.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Exception trenutna = ex;
+
+                while (trenutna.InnerException != null)
+                {
+                    trenutna = trenutna.InnerException;
+                }
+
+                MessageBox.Show(
+                    trenutna.Message,
+                    "Greška pri dodavanju vozila",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+
+                return false;
+            }
+        }
+
+        public static ElektricnoVoziloView VratiEVozilo(int id) //koga smo izabrali za izmenu
+        {
+            ISession s = DataLayer.GetSession();
+
+            ElektricnoVozilo v = s.Load<ElektricnoVozilo>(id);
+            ElektricnoVoziloView ev = new ElektricnoVoziloView(v);
+
+            s.Close();
+
+            return ev;
+        }
+
+        public static bool IzmeniEVozilo(ElektricnoVoziloView v)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                ElektricnoVozilo vozilo = s.Load<ElektricnoVozilo>(v.Id);
+
+                KopirajOsnovnePodatkeVozila(vozilo, v);
+
+                vozilo.KapacitetBaterije = v.KapacitetBat;
+                vozilo.NivoNapunjenosti = v.NivoNapunjenosti;
+                vozilo.TipPunjenja = v.TipPunjenja;
+                vozilo.Autonomija = v.Autonomija;
+                vozilo.BrCiklusaPunjenja = v.BrCiklusaPunjenja;
+
+                ITransaction t = s.BeginTransaction();
+
+                s.Update(vozilo);
+                t.Commit();
+
+                s.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
 
         #endregion
 
@@ -624,6 +1082,129 @@ namespace IznajmljivanjeVozila
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+
+        public static DostupnostVozilaView ProveriDostupnostVozila(
+            int idVozila,
+            DateTime pocetak,
+            DateTime zavrsetak,
+            int? idRezervacijeZaIzuzimanje = null)
+        {
+            DostupnostVozilaView rezultat =
+                new DostupnostVozilaView
+                {
+                    IdVozila = idVozila,
+                    Dostupno = false
+                };
+
+            if (zavrsetak <= pocetak)
+            {
+                rezultat.Poruka =
+                    "Vreme završetka mora biti nakon vremena početka.";
+
+                return rezultat;
+            }
+
+            ISession s = DataLayer.GetSession();
+
+            try
+            {
+                Vozilo vozilo = s.Get<Vozilo>(idVozila);
+
+                if (vozilo == null)
+                {
+                    rezultat.Poruka =
+                        "Izabrano vozilo ne postoji u bazi.";
+
+                    return rezultat;
+                }
+
+                if (!string.Equals(
+                        vozilo.Status,
+                        "Aktivno",
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    rezultat.Poruka =
+                        $"Vozilo nije dostupno jer ima status " +
+                        $"\"{vozilo.Status}\".";
+
+                    return rezultat;
+                }
+
+                IQueryable<Rezervacija> upit =
+                    s.Query<Rezervacija>()
+                        .Where(r =>
+                            r.Vozilo != null &&
+                            r.Vozilo.IdVozila == idVozila &&
+                            r.Status == "Aktivna" &&
+                            pocetak < r.PlaniranoVremeZavrsetka &&
+                            zavrsetak > r.PlaniranoVremePocetka
+                        );
+
+                if (idRezervacijeZaIzuzimanje.HasValue)
+                {
+                    int idZaIzuzimanje =
+                        idRezervacijeZaIzuzimanje.Value;
+
+                    upit = upit.Where(
+                        r => r.IdRezervacije != idZaIzuzimanje
+                    );
+                }
+
+                Rezervacija konfliktnaRezervacija =
+                    upit
+                        .OrderBy(r => r.PlaniranoVremePocetka)
+                        .FirstOrDefault();
+
+                if (konfliktnaRezervacija != null)
+                {
+                    rezultat.Dostupno = false;
+
+                    rezultat.IdKonfliktneRezervacije =
+                        konfliktnaRezervacija.IdRezervacije;
+
+                    rezultat.ZauzetoOd =
+                        konfliktnaRezervacija
+                            .PlaniranoVremePocetka;
+
+                    rezultat.ZauzetoDo =
+                        konfliktnaRezervacija
+                            .PlaniranoVremeZavrsetka;
+
+                    rezultat.Poruka =
+                        $"Vozilo nije dostupno. " +
+                        $"Rezervacija " +
+                        $"{konfliktnaRezervacija.IdRezervacije} " +
+                        $"traje od " +
+                        $"{konfliktnaRezervacija.PlaniranoVremePocetka:dd.MM.yyyy HH:mm} " +
+                        $"do " +
+                        $"{konfliktnaRezervacija.PlaniranoVremeZavrsetka:dd.MM.yyyy HH:mm}.";
+
+                    return rezultat;
+                }
+
+                rezultat.Dostupno = true;
+
+                rezultat.Poruka =
+                    $"Vozilo je dostupno u periodu od " +
+                    $"{pocetak:dd.MM.yyyy HH:mm} do " +
+                    $"{zavrsetak:dd.MM.yyyy HH:mm}.";
+
+                return rezultat;
+            }
+            catch (Exception ex)
+            {
+                rezultat.Dostupno = false;
+                rezultat.Poruka =
+                    "Greška prilikom provere dostupnosti: " +
+                    ex.Message;
+
+                return rezultat;
+            }
+            finally
+            {
+                s.Close();
             }
         }
 
@@ -787,92 +1368,247 @@ namespace IznajmljivanjeVozila
             return vozac;
         }
 
-        public static List<DogadjajiView> VratiSveDogadjaje() //citanje
+        public static List<DogadjajiView>VratiSveDogadjaje()
         {
-            List<DogadjajiView> dogadjaj = new List<DogadjajiView>();
+            List<DogadjajiView> rezultat =
+                new List<DogadjajiView>();
 
-            ISession s = DataLayer.GetSession();
+            using ISession s = DataLayer.GetSession();
 
-            foreach (Dogadjaji d in s.Query<Dogadjaji>())
+            List<Dogadjaji> dogadjaji =
+                s.Query<Dogadjaji>().ToList();
+
+            foreach (Dogadjaji d in dogadjaji)
             {
-                dogadjaj.Add(new DogadjajiView(d));
+                Voznja voznja =
+                    s.Query<Voznja>()
+                        .FirstOrDefault(v =>
+                            v.Dogadjaji != null &&
+                            v.Dogadjaji.Id == d.Id
+                        );
+
+                int idVoznje =
+                    voznja?.IdVoznje ?? 0;
+
+                rezultat.Add(
+                    new DogadjajiView(
+                        d,
+                        idVoznje
+                    )
+                );
             }
 
-            s.Close();
-
-            return dogadjaj;
+            return rezultat;
         }
 
-        public static bool DodajDogadjaj(DogadjajiView d)
+        public static bool DodajDogadjaj(
+      DogadjajiView d)
         {
+            using ISession s = DataLayer.GetSession();
+            using ITransaction t = s.BeginTransaction();
+
             try
             {
-                ISession s = DataLayer.GetSession();
+                Voznja voznja =
+                    s.Get<Voznja>(d.IdVoznje);
 
-                Dogadjaji noviDogadjaj = new Dogadjaji
+                if (voznja == null)
                 {
-                    Id = d.Id,
-                    NagloKocenje = d.NagloKocenje,
-                    PrekoracenjeBrzine = d.PrekoracenjeBrzine,
-                    DuzeZadrzavanje = d.DuzeZadrzavanje,
-                    NeovlasceniIzlazak = d.NeovlasceniIzlazak,
-                    Sudar = d.Sudar
-                };
+                    MessageBox.Show(
+                        "Izabrana vožnja ne postoji."
+                    );
 
-                ITransaction t = s.BeginTransaction();
+                    return false;
+                }
+
+                if (voznja.Dogadjaji != null)
+                {
+                    MessageBox.Show(
+                        "Izabrana vožnja već ima evidentiran događaj."
+                    );
+
+                    return false;
+                }
+
+                Dogadjaji noviDogadjaj =
+                    new Dogadjaji
+                    {
+                        Id = d.Id,
+                        NagloKocenje =
+                            d.NagloKocenje,
+                        PrekoracenjeBrzine =
+                            d.PrekoracenjeBrzine,
+                        DuzeZadrzavanje =
+                            d.DuzeZadrzavanje,
+                        NeovlasceniIzlazak =
+                            d.NeovlasceniIzlazak,
+                        Sudar = d.Sudar
+                    };
 
                 s.Save(noviDogadjaj);
 
+                voznja.Dogadjaji =
+                    noviDogadjaj;
+
                 t.Commit();
-                s.Close();
 
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                if (t.IsActive)
+                {
+                    t.Rollback();
+                }
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ??
+                    ex.Message
+                );
+
                 return false;
             }
         }
 
-        public static DogadjajiView VratiDogadjaj(int id) //koga smo izabrali za izmenu
+        public static DogadjajiView VratiDogadjaj(int id)
         {
-            ISession s = DataLayer.GetSession();
+            using ISession s = DataLayer.GetSession();
 
-            Dogadjaji d = s.Load<Dogadjaji>(id);
-            DogadjajiView rez = new DogadjajiView(d);
+            Dogadjaji dogadjaj =
+                s.Get<Dogadjaji>(id);
 
-            s.Close();
+            if (dogadjaj == null)
+            {
+                return null;
+            }
 
-            return rez;
+            Voznja voznja =
+                s.Query<Voznja>()
+                    .FirstOrDefault(v =>
+                        v.Dogadjaji != null &&
+                        v.Dogadjaji.Id == id
+                    );
+
+            return new DogadjajiView(
+                dogadjaj,
+                voznja?.IdVoznje ?? 0
+            );
         }
 
-        public static bool IzmeniDogadjaj(DogadjajiView d) //izmena
+        public static bool IzmeniDogadjaj(
+     DogadjajiView d)
         {
+            using ISession s = DataLayer.GetSession();
+            using ITransaction t = s.BeginTransaction();
+
             try
             {
-                ISession s = DataLayer.GetSession();
+                Dogadjaji dogadjaj =
+                    s.Get<Dogadjaji>(d.Id);
 
-                Dogadjaji dogadjaji = s.Load<Dogadjaji>(d.Id);
+                if (dogadjaj == null)
+                {
+                    MessageBox.Show(
+                        "Događaj ne postoji."
+                    );
 
-                dogadjaji.NagloKocenje = d.NagloKocenje;
-                dogadjaji.PrekoracenjeBrzine = d.PrekoracenjeBrzine;
-                dogadjaji.DuzeZadrzavanje = d.DuzeZadrzavanje;
-                dogadjaji.NeovlasceniIzlazak = d.NeovlasceniIzlazak;
-                dogadjaji.Sudar = d.Sudar;
+                    return false;
+                }
 
-                ITransaction t = s.BeginTransaction();
-                s.Update(dogadjaji);
+                Voznja staraVoznja =
+                    s.Query<Voznja>()
+                        .FirstOrDefault(v =>
+                            v.Dogadjaji != null &&
+                            v.Dogadjaji.Id == d.Id
+                        );
+
+                Voznja novaVoznja =
+                    s.Get<Voznja>(d.IdVoznje);
+
+                if (novaVoznja == null)
+                {
+                    MessageBox.Show(
+                        "Izabrana vožnja ne postoji."
+                    );
+
+                    return false;
+                }
+
+                if (novaVoznja.Dogadjaji != null &&
+                    novaVoznja.Dogadjaji.Id != d.Id)
+                {
+                    MessageBox.Show(
+                        "Izabrana vožnja već ima drugi događaj."
+                    );
+
+                    return false;
+                }
+
+                dogadjaj.NagloKocenje =
+                    d.NagloKocenje;
+
+                dogadjaj.PrekoracenjeBrzine =
+                    d.PrekoracenjeBrzine;
+
+                dogadjaj.DuzeZadrzavanje =
+                    d.DuzeZadrzavanje;
+
+                dogadjaj.NeovlasceniIzlazak =
+                    d.NeovlasceniIzlazak;
+
+                dogadjaj.Sudar =
+                    d.Sudar;
+
+                if (staraVoznja != null &&
+                    staraVoznja.IdVoznje !=
+                    novaVoznja.IdVoznje)
+                {
+                    staraVoznja.Dogadjaji = null;
+                }
+
+                novaVoznja.Dogadjaji =
+                    dogadjaj;
+
                 t.Commit();
 
-                s.Close();
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                if (t.IsActive)
+                {
+                    t.Rollback();
+                }
+
+                MessageBox.Show(
+                    ex.InnerException?.Message ??
+                    ex.Message
+                );
+
                 return false;
             }
+        }
+
+        public static List<VoznjaCombo>VratiVoznjeZaCombo() //za dogadjaj formu
+        {
+            List<VoznjaCombo> rezultat =
+                new List<VoznjaCombo>();
+
+            using ISession s = DataLayer.GetSession();
+
+            List<Voznja> voznje =
+                s.Query<Voznja>()
+                    .OrderBy(v => v.IdVoznje)
+                    .ToList();
+
+            foreach (Voznja v in voznje)
+            {
+                rezultat.Add(
+                    new VoznjaCombo(v)
+                );
+            }
+
+            return rezultat;
         }
 
         public static List<SteteView> VratiStete() //citanje
@@ -904,7 +1640,9 @@ namespace IznajmljivanjeVozila
                     Zapisnici = steta.Zapisnici,
                     OsiguravajuceKuce = steta.OsiguravajuceKuce,
                     ProcenaStete = steta.ProcenaStete,
-                    Odgovornost = steta.Odgovornost
+                    Odgovornost = steta.Odgovornost,
+
+                    Voznja =s.Load<Voznja>(steta.IdVoznje)
                 };
 
                 ITransaction t = s.BeginTransaction();
@@ -935,32 +1673,75 @@ namespace IznajmljivanjeVozila
             return st;
         }
 
-        public static bool IzmeniStetu(SteteView steta)
+        public static bool IzmeniStetu(
+       SteteView stetaView)
         {
             try
             {
-                ISession s = DataLayer.GetSession();
+                using ISession s =
+                    DataLayer.GetSession();
 
-                Steta st = s.Load<Steta>(steta.Id);
+                Steta steta =
+                    s.Get<Steta>(
+                        stetaView.Id
+                    );
 
-                steta.Fotografije = st.Foto;
-                steta.Zapisnici = st.Zapisnici;
-                steta.OsiguravajuceKuce = st.OsiguravajuceKuce;
-                steta.ProcenaStete = st.ProcenaStete;
-                steta.Odgovornost = st.Odgovornost;
+                if (steta == null)
+                {
+                    MessageBox.Show(
+                        "Šteta ne postoji."
+                    );
 
-                ITransaction t = s.BeginTransaction();
+                    return false;
+                }
+
+                Voznja voznja =
+                    s.Get<Voznja>(
+                        stetaView.IdVoznje
+                    );
+
+                if (voznja == null)
+                {
+                    MessageBox.Show(
+                        "Izabrana vožnja ne postoji."
+                    );
+
+                    return false;
+                }
+
+                steta.Foto =
+                    stetaView.Fotografije;
+
+                steta.Zapisnici =
+                    stetaView.Zapisnici;
+
+                steta.OsiguravajuceKuce =
+                    stetaView.OsiguravajuceKuce;
+
+                steta.ProcenaStete =
+                    stetaView.ProcenaStete;
+
+                steta.Odgovornost =
+                    stetaView.Odgovornost;
+
+                steta.Voznja = voznja;
+
+                using ITransaction t =
+                    s.BeginTransaction();
 
                 s.Update(steta);
 
                 t.Commit();
-                s.Close();
 
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(
+                    ex.InnerException?.Message ??
+                    ex.Message
+                );
+
                 return false;
             }
         }

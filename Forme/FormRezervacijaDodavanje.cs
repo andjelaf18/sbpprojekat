@@ -25,16 +25,10 @@ namespace IznajmljivanjeVozila.Forme
             popuniComboVozaci();
             popuniComboVozila();
             comboBoxKorisnik.SelectedIndex = -1;
-            comboBoxVozac.SelectedIndex = -1; 
+            comboBoxVozac.SelectedIndex = -1;
             comboBoxVozilo.SelectedIndex = -1;
             comboBoxTip.SelectedIndex = -1;
             comboBoxStatus.SelectedIndex = -1;
-
-            if (comboBoxTip.Items.Count > 0)
-                comboBoxTip.SelectedIndex = 0;
-
-            if (comboBoxStatus.Items.Count > 0)
-                comboBoxStatus.SelectedIndex = 0;
         }
 
         private void popuniComboKorisnici()
@@ -97,56 +91,125 @@ namespace IznajmljivanjeVozila.Forme
             string poruka =
                 "Da li želite da dodate novu rezervaciju?";
 
-            DialogResult result = MessageBox.Show(
+            if (dateTimePickerKraj.Value <=
+    dateTimePickerPocetak.Value)
+            {
+                MessageBox.Show(
+                    "Vreme završetka mora biti nakon vremena početka.");
+
+                return;
+            }
+
+            if (comboBoxStatus.Text == "Aktivna")
+            {
+                DostupnostVozilaView dostupnost =
+                    DTOManager.ProveriDostupnostVozila(
+                        vozilo.Id,
+                        dateTimePickerPocetak.Value,
+                        dateTimePickerKraj.Value
+                    );
+
+                if (!dostupnost.Dostupno)
+                {
+                    MessageBox.Show(
+                        dostupnost.Poruka,
+                        "Vozilo nije dostupno",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+
+                    return;
+                }
+
+                DialogResult result = MessageBox.Show(
                 poruka,
                 "Pitanje",
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Question
             );
 
-            if (result != DialogResult.OK)
-                return;
+                if (result != DialogResult.OK)
+                    return;
 
-            rezervacija.Id = int.Parse(textBoxId.Text);
+                rezervacija.Id = int.Parse(textBoxId.Text);
 
-            rezervacija.IdKorisnika = korisnik.Id;
-            rezervacija.IdVozaca = vozac.Id;
-            rezervacija.IdVozila = vozilo.Id;
+                rezervacija.IdKorisnika = korisnik.Id;
+                rezervacija.IdVozaca = vozac.Id;
+                rezervacija.IdVozila = vozilo.Id;
 
-            rezervacija.PlaniranaLokacijaPreuzimanja =
-                textBoxLokPreuzimanja.Text;
+                rezervacija.PlaniranaLokacijaPreuzimanja =
+                    textBoxLokPreuzimanja.Text;
 
-            rezervacija.PlaniranaLokacijaVracanja =
-                textBoxLokVracanja.Text;
+                rezervacija.PlaniranaLokacijaVracanja =
+                    textBoxLokVracanja.Text;
 
-            rezervacija.Tip = comboBoxTip.Text;
-            rezervacija.Status = comboBoxStatus.Text;
+                rezervacija.Tip = comboBoxTip.Text;
+                rezervacija.Status = comboBoxStatus.Text;
 
-            rezervacija.PlaniranoVremePocetka =
-                dateTimePickerPocetak.Value;
+                rezervacija.PlaniranoVremePocetka =
+                    dateTimePickerPocetak.Value;
 
-            rezervacija.PlaniranoVremeZavrsetka =
-                dateTimePickerKraj.Value;
+                rezervacija.PlaniranoVremeZavrsetka =
+                    dateTimePickerKraj.Value;
 
-            bool uspesno =
-                DTOManager.DodajRezervaciju(rezervacija);
+                bool uspesno =
+                    DTOManager.DodajRezervaciju(rezervacija);
 
-            if (uspesno)
-            {
-                MessageBox.Show(
-                    "Uspešno ste dodali novu rezervaciju.");
+                if (uspesno)
+                {
+                    MessageBox.Show(
+                        "Uspešno ste dodali novu rezervaciju.");
 
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-            else
-            {
-                MessageBox.Show("Dodavanje nije uspelo.");
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Dodavanje nije uspelo.");
+                }
             }
         }
 
         private void FormRezervacijaIVoznjaDodavanje_Load(object sender, EventArgs e)
         {
+        }
+
+        private void buttonProveriDostupnost_Click(object sender, EventArgs e)
+        {
+            VoziloVoznjaCombo izabranoVozilo =
+         comboBoxVozilo.SelectedItem
+             as VoziloVoznjaCombo;
+
+            if (izabranoVozilo == null)
+            {
+                MessageBox.Show(
+                    "Prvo izaberite vozilo.");
+
+                return;
+            }
+
+            if (dateTimePickerKraj.Value <=
+                dateTimePickerPocetak.Value)
+            {
+                MessageBox.Show(
+                    "Vreme završetka mora biti nakon početka.");
+
+                return;
+            }
+
+            VoziloView vozilo =
+                DTOManager.VratiVozilo(
+                    izabranoVozilo.Id
+                );
+
+            DostupnostVozila forma =
+                new DostupnostVozila(
+                    vozilo,
+                    dateTimePickerPocetak.Value,
+                    dateTimePickerKraj.Value
+                );
+
+            forma.ShowDialog(this);
         }
     }
 }

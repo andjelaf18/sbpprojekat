@@ -31,9 +31,6 @@
             label1 = new Label();
             listView1 = new ListView();
             columnHeader1 = new ColumnHeader();
-            buttonDodajVoznju = new Button();
-            buttonIzmeniVoznju = new Button();
-            buttonObrisiVoznju = new Button();
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
             columnHeader5 = new ColumnHeader();
@@ -43,6 +40,9 @@
             columnHeader6 = new ColumnHeader();
             columnHeader7 = new ColumnHeader();
             columnHeader8 = new ColumnHeader();
+            buttonDodajVoznju = new Button();
+            buttonIzmeniVoznju = new Button();
+            buttonObrisiVoznju = new Button();
             SuspendLayout();
             // 
             // label1
@@ -71,6 +71,52 @@
             // columnHeader1
             // 
             columnHeader1.Text = "Id";
+            columnHeader1.Width = 50;
+            // 
+            // columnHeader3
+            // 
+            columnHeader3.Text = "Vreme početka";
+            columnHeader3.Width = 250;
+            // 
+            // columnHeader4
+            // 
+            columnHeader4.Text = "Vreme završetka";
+            columnHeader4.Width = 250;
+            // 
+            // columnHeader5
+            // 
+            columnHeader5.Text = "Kilometraža";
+            columnHeader5.Width = 140;
+            // 
+            // columnHeader11
+            // 
+            columnHeader11.Text = "Trajanje";
+            columnHeader11.Width = 120;
+            // 
+            // columnHeader12
+            // 
+            columnHeader12.Text = "Početni nivo goriva/baterije";
+            columnHeader12.Width = 350;
+            // 
+            // columnHeader2
+            // 
+            columnHeader2.Text = "Početna lokacija";
+            columnHeader2.Width = 200;
+            // 
+            // columnHeader6
+            // 
+            columnHeader6.Text = "Završna lokacija";
+            columnHeader6.Width = 200;
+            // 
+            // columnHeader7
+            // 
+            columnHeader7.Text = "Obračunata cena";
+            columnHeader7.Width = 200;
+            // 
+            // columnHeader8
+            // 
+            columnHeader8.Text = "Dodatne naknade";
+            columnHeader8.Width = 220;
             // 
             // buttonDodajVoznju
             // 
@@ -116,42 +162,6 @@
             buttonObrisiVoznju.Text = "Obriši vožnju";
             buttonObrisiVoznju.UseVisualStyleBackColor = true;
             buttonObrisiVoznju.Click += buttonObrisiVoznju_Click;
-            // 
-            // columnHeader3
-            // 
-            columnHeader3.Text = "Vreme početka";
-            // 
-            // columnHeader4
-            // 
-            columnHeader4.Text = "Vreme završetka";
-            // 
-            // columnHeader5
-            // 
-            columnHeader5.Text = "Kilometraža";
-            // 
-            // columnHeader11
-            // 
-            columnHeader11.Text = "Trajanje";
-            // 
-            // columnHeader12
-            // 
-            columnHeader12.Text = "Početni nivo goriva/baterije";
-            // 
-            // columnHeader2
-            // 
-            columnHeader2.Text = "Početna lokacija";
-            // 
-            // columnHeader6
-            // 
-            columnHeader6.Text = "Završna lokacija";
-            // 
-            // columnHeader7
-            // 
-            columnHeader7.Text = "Obračunata cena";
-            // 
-            // columnHeader8
-            // 
-            columnHeader8.Text = "Dodatne naknade";
             // 
             // FormVoznje
             // 

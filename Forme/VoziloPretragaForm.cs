@@ -20,8 +20,6 @@ namespace IznajmljivanjeVozila.Forme
             comboBoxStatus.SelectedIndex = 0;
             comboBoxNamena.SelectedIndex = 0;
             comboBoxTipKoriscenja.SelectedIndex = 0;
-            comboBoxDopuna.SelectedIndex = 0;
-            comboBoxTipGoriva.SelectedIndex = 0;
         }
 
         private void buttonPretrazi_Click(object sender, EventArgs e)
@@ -34,9 +32,7 @@ namespace IznajmljivanjeVozila.Forme
                 comboBoxStatus.Text,
                 comboBoxTipKoriscenja.Text,
                 comboBoxNamena.Text,
-                comboBoxTipPogona.Text,
-                comboBoxDopuna.Text,
-                comboBoxTipGoriva.Text
+                comboBoxTipPogona.Text
             );
 
             foreach (PretrazenoVozilo v in vozila)

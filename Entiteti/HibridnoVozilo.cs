@@ -8,7 +8,7 @@ namespace IznajmljivanjeVozila.Entiteti
 {
     public class HibridnoVozilo : Vozilo
     {
-        public virtual int IdVozila { get; set; }
+        //public virtual int IdVozila { get; set; }
 
         public virtual double KapacitetBat { get; set; }
 

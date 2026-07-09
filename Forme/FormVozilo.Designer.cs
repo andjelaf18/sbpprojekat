@@ -47,8 +47,10 @@
             columnHeader7 = new ColumnHeader();
             columnHeader12 = new ColumnHeader();
             columnHeader13 = new ColumnHeader();
+            columnHeader14 = new ColumnHeader();
             label1 = new Label();
             buttonServisiKvarovi = new Button();
+            buttonDostupnostVozila = new Button();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -60,7 +62,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { pretragaVozilaToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(906, 31);
+            menuStrip1.Size = new Size(1198, 31);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -79,7 +81,7 @@
             buttonObrisiVozilo.FlatStyle = FlatStyle.Flat;
             buttonObrisiVozilo.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonObrisiVozilo.ForeColor = SystemColors.ControlDarkDark;
-            buttonObrisiVozilo.Location = new Point(678, 307);
+            buttonObrisiVozilo.Location = new Point(970, 276);
             buttonObrisiVozilo.Margin = new Padding(4, 3, 4, 3);
             buttonObrisiVozilo.Name = "buttonObrisiVozilo";
             buttonObrisiVozilo.Size = new Size(202, 58);
@@ -96,7 +98,7 @@
             buttonIzmeniVozilo.FlatStyle = FlatStyle.Flat;
             buttonIzmeniVozilo.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonIzmeniVozilo.ForeColor = SystemColors.ControlDarkDark;
-            buttonIzmeniVozilo.Location = new Point(678, 200);
+            buttonIzmeniVozilo.Location = new Point(970, 176);
             buttonIzmeniVozilo.Margin = new Padding(4, 3, 4, 3);
             buttonIzmeniVozilo.Name = "buttonIzmeniVozilo";
             buttonIzmeniVozilo.Size = new Size(202, 58);
@@ -113,7 +115,7 @@
             buttonDodajVozilo.FlatStyle = FlatStyle.Flat;
             buttonDodajVozilo.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonDodajVozilo.ForeColor = SystemColors.ControlDarkDark;
-            buttonDodajVozilo.Location = new Point(678, 101);
+            buttonDodajVozilo.Location = new Point(970, 77);
             buttonDodajVozilo.Margin = new Padding(4, 3, 4, 3);
             buttonDodajVozilo.Name = "buttonDodajVozilo";
             buttonDodajVozilo.Size = new Size(202, 58);
@@ -125,13 +127,13 @@
             // listView1
             // 
             listView1.BackColor = Color.PaleGoldenrod;
-            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader8, columnHeader9, columnHeader10, columnHeader11, columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5, columnHeader6, columnHeader7, columnHeader12, columnHeader13 });
+            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader8, columnHeader9, columnHeader10, columnHeader11, columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5, columnHeader6, columnHeader7, columnHeader12, columnHeader13, columnHeader14 });
             listView1.ForeColor = SystemColors.ControlDarkDark;
             listView1.FullRowSelect = true;
             listView1.Location = new Point(20, 67);
             listView1.Margin = new Padding(4, 3, 4, 3);
             listView1.Name = "listView1";
-            listView1.Size = new Size(626, 456);
+            listView1.Size = new Size(925, 562);
             listView1.TabIndex = 12;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -139,61 +141,79 @@
             // columnHeader8
             // 
             columnHeader8.Text = "ID";
+            columnHeader8.Width = 50;
             // 
             // columnHeader9
             // 
             columnHeader9.Text = "Registracija";
+            columnHeader9.Width = 160;
             // 
             // columnHeader10
             // 
-            columnHeader10.Text = "VinBroj";
+            columnHeader10.Text = "Vin broj";
+            columnHeader10.Width = 140;
             // 
             // columnHeader11
             // 
             columnHeader11.Text = "Marka";
+            columnHeader11.Width = 140;
             // 
             // columnHeader1
             // 
             columnHeader1.Text = "Model";
+            columnHeader1.Width = 140;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Godina proizvodnje";
+            columnHeader2.Width = 220;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Datum nabavke";
+            columnHeader3.Width = 220;
             // 
             // columnHeader4
             // 
             columnHeader4.Text = "Status";
+            columnHeader4.Width = 120;
             // 
             // columnHeader5
             // 
-            columnHeader5.Text = "Tip koriscenja";
+            columnHeader5.Text = "Tip korišćenja";
+            columnHeader5.Width = 140;
             // 
             // columnHeader6
             // 
-            columnHeader6.Text = "Broj sedista";
+            columnHeader6.Text = "Broj sedišta";
+            columnHeader6.Width = 150;
             // 
             // columnHeader7
             // 
             columnHeader7.Text = "Stanje enterijera";
+            columnHeader7.Width = 200;
             // 
             // columnHeader12
             // 
             columnHeader12.Text = "Stanje eksterijera";
+            columnHeader12.Width = 200;
             // 
             // columnHeader13
             // 
             columnHeader13.Text = "Dodatna oprema";
+            columnHeader13.Width = 200;
+            // 
+            // columnHeader14
+            // 
+            columnHeader14.Text = "Tip pogona";
+            columnHeader14.Width = 140;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = SystemColors.ControlDarkDark;
-            label1.Location = new Point(678, 380);
+            label1.Location = new Point(967, 374);
             label1.Name = "label1";
             label1.Size = new Size(220, 161);
             label1.TabIndex = 13;
@@ -208,21 +228,39 @@
             buttonServisiKvarovi.FlatStyle = FlatStyle.Flat;
             buttonServisiKvarovi.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonServisiKvarovi.ForeColor = SystemColors.ControlDarkDark;
-            buttonServisiKvarovi.Location = new Point(678, 556);
+            buttonServisiKvarovi.Location = new Point(970, 547);
             buttonServisiKvarovi.Margin = new Padding(4, 3, 4, 3);
             buttonServisiKvarovi.Name = "buttonServisiKvarovi";
-            buttonServisiKvarovi.Size = new Size(202, 73);
+            buttonServisiKvarovi.Size = new Size(202, 58);
             buttonServisiKvarovi.TabIndex = 14;
             buttonServisiKvarovi.Text = "Servisi i kvarovi";
             buttonServisiKvarovi.UseVisualStyleBackColor = true;
             buttonServisiKvarovi.Click += buttonServisiKvarovi_Click;
+            // 
+            // buttonDostupnostVozila
+            // 
+            buttonDostupnostVozila.Anchor = AnchorStyles.Right;
+            buttonDostupnostVozila.FlatAppearance.BorderColor = SystemColors.ControlDarkDark;
+            buttonDostupnostVozila.FlatAppearance.BorderSize = 3;
+            buttonDostupnostVozila.FlatStyle = FlatStyle.Flat;
+            buttonDostupnostVozila.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonDostupnostVozila.ForeColor = SystemColors.ControlDarkDark;
+            buttonDostupnostVozila.Location = new Point(970, 627);
+            buttonDostupnostVozila.Margin = new Padding(4, 3, 4, 3);
+            buttonDostupnostVozila.Name = "buttonDostupnostVozila";
+            buttonDostupnostVozila.Size = new Size(202, 75);
+            buttonDostupnostVozila.TabIndex = 15;
+            buttonDostupnostVozila.Text = "Proveri dostupnost vozila";
+            buttonDostupnostVozila.UseVisualStyleBackColor = true;
+            buttonDostupnostVozila.Click += buttonDostupnostVozila_Click;
             // 
             // FormVozilo
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
-            ClientSize = new Size(906, 641);
+            ClientSize = new Size(1198, 714);
+            Controls.Add(buttonDostupnostVozila);
             Controls.Add(buttonServisiKvarovi);
             Controls.Add(label1);
             Controls.Add(listView1);
@@ -266,5 +304,7 @@
         private ColumnHeader columnHeader13;
         private Label label1;
         private Button buttonServisiKvarovi;
+        private ColumnHeader columnHeader14;
+        private Button buttonDostupnostVozila;
     }
 }

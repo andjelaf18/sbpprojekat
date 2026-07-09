@@ -8,15 +8,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace IznajmljivanjeVozila.Forme
 {
-    public partial class VoziloIzmenaForm : Form
+    public partial class HibridnoVoziloIzmena : Form
     {
-        public VoziloView vozilo;
+        public HibridnoVoziloIzmena()
+        {
+            InitializeComponent();
+        }
 
-        public VoziloIzmenaForm(VoziloView v)
+        public HibridnoVoziloView vozilo;
+
+        public HibridnoVoziloIzmena(HibridnoVoziloView v)
         {
             InitializeComponent();
             this.vozilo = v;
@@ -24,23 +28,26 @@ namespace IznajmljivanjeVozila.Forme
 
         private void popuniPodacima()
         {
-            //textBoxId.Text = vozilo.Id.ToString();
-            // textBoxId.Enabled = false;
+            textBoxId.Text = vozilo.Id.ToString();
+            textBoxId.Enabled = false;
 
             textBoxRegistracija.Text = vozilo.Registracija;
             textBoxVinBroj.Text = vozilo.VinBr.ToString();
             textBoxMarka.Text = vozilo.Marka;
             textBoxModel.Text = vozilo.Model;
             textBoxGodProizvodnje.Text = vozilo.GodProizvodnje.ToString();
-            dateTimePickerNabavka.Text = vozilo.DatumNabavke.ToShortDateString();
+            dateTimePickerNabavka.Value = vozilo.DatumNabavke;
             textBoxStatus.Text = vozilo.Status;
             textBoxTipKoriscenja.Text = vozilo.TipKoriscenja;
             numericUpDownBrSedista.Value = vozilo.BrSedista;
             textBoxStanjeEnterijera.Text = vozilo.StanjeEnterijera;
             textBoxStanjeEksterijera.Text = vozilo.StanjeEksterijera;
             textBoxDodatnaOprema.Text = vozilo.DodatnaOprema;
-        }
 
+            numericUpDownKapBat.Value = (decimal)vozilo.KapacitetBat;
+            textBoxTipHVozila.Text = vozilo.TipHibridnogVozila;
+
+        }
 
         private void buttonIzmeniVozilo_Click(object sender, EventArgs e)
         {
@@ -55,16 +62,19 @@ namespace IznajmljivanjeVozila.Forme
             vozilo.BrSedista = (int)numericUpDownBrSedista.Value;
             vozilo.StanjeEnterijera = textBoxStanjeEnterijera.Text;
             vozilo.StanjeEksterijera = textBoxStanjeEksterijera.Text;
-            //dodatna oprema
+            vozilo.DodatnaOprema = textBoxDodatnaOprema.Text;
 
-            DTOManager.IzmeniVozilo(vozilo);
+            vozilo.KapacitetBat = (double)numericUpDownKapBat.Value;
+            vozilo.TipHibridnogVozila = textBoxTipHVozila.Text;
 
-            MessageBox.Show("Ažuriranje vozila je uspešno izvršeno!");
+            DTOManager.IzmeniHVozilo(vozilo);
+
+            MessageBox.Show("Ažuriranje hibridnog vozila je uspešno izvršeno!");
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
 
-        private void VoziloIzmenaForm_Load(object sender, EventArgs e)
+        private void HibridnoVoziloIzmena_Load(object sender, EventArgs e)
         {
             popuniPodacima();
         }

@@ -42,6 +42,8 @@
             textBoxNeovlasceniIzlazak = new TextBox();
             textBoxSudar = new TextBox();
             buttonDodaj = new Button();
+            label7 = new Label();
+            comboBoxVoznje = new ComboBox();
             SuspendLayout();
             // 
             // label8
@@ -184,7 +186,7 @@
             buttonDodaj.FlatStyle = FlatStyle.Flat;
             buttonDodaj.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonDodaj.ForeColor = SystemColors.ControlDarkDark;
-            buttonDodaj.Location = new Point(12, 440);
+            buttonDodaj.Location = new Point(12, 508);
             buttonDodaj.Margin = new Padding(4, 3, 4, 3);
             buttonDodaj.Name = "buttonDodaj";
             buttonDodaj.Size = new Size(202, 58);
@@ -193,12 +195,35 @@
             buttonDodaj.UseVisualStyleBackColor = true;
             buttonDodaj.Click += buttonDodaj_Click;
             // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label7.ForeColor = SystemColors.ControlDarkDark;
+            label7.Location = new Point(12, 454);
+            label7.Name = "label7";
+            label7.Size = new Size(82, 23);
+            label7.TabIndex = 30;
+            label7.Text = "Vožnja:";
+            label7.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // comboBoxVoznje
+            // 
+            comboBoxVoznje.BackColor = Color.PaleGoldenrod;
+            comboBoxVoznje.FormattingEnabled = true;
+            comboBoxVoznje.Location = new Point(100, 451);
+            comboBoxVoznje.Name = "comboBoxVoznje";
+            comboBoxVoznje.Size = new Size(389, 31);
+            comboBoxVoznje.TabIndex = 31;
+            // 
             // FormDogadjajDodavanje
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
-            ClientSize = new Size(536, 510);
+            ClientSize = new Size(536, 578);
+            Controls.Add(comboBoxVoznje);
+            Controls.Add(label7);
             Controls.Add(buttonDodaj);
             Controls.Add(textBoxSudar);
             Controls.Add(textBoxNeovlasceniIzlazak);
@@ -239,5 +264,7 @@
         private TextBox textBoxNeovlasceniIzlazak;
         private TextBox textBoxSudar;
         private Button buttonDodaj;
+        private Label label7;
+        private ComboBox comboBoxVoznje;
     }
 }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("IznajmljivanjeVozila")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6196ffdb22a7de2cbfc36c0aac9c621f925f79e9")]
 [assembly: System.Reflection.AssemblyProductAttribute("IznajmljivanjeVozila")]
 [assembly: System.Reflection.AssemblyTitleAttribute("IznajmljivanjeVozila")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

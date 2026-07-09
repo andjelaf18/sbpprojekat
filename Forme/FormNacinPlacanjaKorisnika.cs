@@ -52,9 +52,6 @@ namespace IznajmljivanjeVozila.Forme
             comboBoxKorisnik.ValueMember = "Id";
             comboBoxKorisnik.SelectedIndex = -1;
 
-            if (comboBoxKorisnik.Items.Count > 0)
-                comboBoxKorisnik.SelectedIndex = 0;
-
             popuniPodacima();
         }
 
@@ -102,6 +99,9 @@ namespace IznajmljivanjeVozila.Forme
             popuniPodacima();
         }
 
-     
+        private void FormNacinPlacanjaKorisnika_Load(object sender, EventArgs e)
+        {
+            popuniPodacima();
+        }
     }
 }

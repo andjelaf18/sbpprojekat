@@ -19,6 +19,23 @@ namespace IznajmljivanjeVozila.Forme
         {
             InitializeComponent();
             dogadjaji = new DogadjajiView();
+            PopuniComboVoznje();
+            comboBoxVoznje.SelectedIndex = -1;
+        }
+
+        private void PopuniComboVoznje()
+        {
+            comboBoxVoznje.DataSource =
+                DTOManager.VratiVoznjeZaCombo();
+
+            comboBoxVoznje.DisplayMember =
+                "Prikaz";
+
+            comboBoxVoznje.ValueMember =
+                "Id";
+
+            comboBoxVoznje.DropDownStyle =
+                ComboBoxStyle.DropDownList;
         }
 
         private void buttonDodaj_Click(object sender, EventArgs e)
@@ -42,7 +59,27 @@ namespace IznajmljivanjeVozila.Forme
                 this.dogadjaji.NeovlasceniIzlazak = textBoxNeovlasceniIzlazak.Text;
                 this.dogadjaji.Sudar = textBoxSudar.Text;
 
-                bool uspesno = DTOManager.DodajDogadjaj(this.dogadjaji);
+                VoznjaCombo izabranaVoznja = comboBoxVoznje.SelectedItem as VoznjaCombo;
+
+                if (izabranaVoznja == null)
+                {
+                    MessageBox.Show("Izaberite vožnju.");
+                    return;
+                }
+
+                dogadjaji.IdVoznje = izabranaVoznja.Id;
+
+                bool uspesno =
+                    DTOManager.DodajDogadjaj(dogadjaji);
+
+                if (izabranaVoznja == null)
+                {
+                    MessageBox.Show(
+                        "Izaberite vožnju."
+                    );
+
+                    return;
+                }
 
                 if (uspesno)
                 {

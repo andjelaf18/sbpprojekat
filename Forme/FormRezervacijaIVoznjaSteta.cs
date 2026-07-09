@@ -20,24 +20,30 @@ namespace IznajmljivanjeVozila.Forme
             popuniPodacima();
         }
 
-        public void popuniPodacima() //za listView
+        public void popuniPodacima()
         {
-
             listView1.Items.Clear();
-            List<SteteView> podaci = DTOManager.VratiStete();
+
+            List<SteteView> podaci =
+                DTOManager.VratiStete();
 
             foreach (SteteView s in podaci)
             {
-                ListViewItem item = new ListViewItem(new string[] {
-                    s.Id.ToString(),
-                    s.Fotografije,
-                    s.Zapisnici,
-                    s.OsiguravajuceKuce,
-                    s.ProcenaStete,
-                    s.Odgovornost
-                });
-                listView1.Items.Add(item);
+                ListViewItem item =
+                    new ListViewItem(new string[]
+                    {
+                s.Id.ToString(),
+                s.Fotografije ?? "",
+                s.Zapisnici ?? "",
+                s.OsiguravajuceKuce ?? "",
+                s.ProcenaStete ?? "",
+                s.Odgovornost ?? "",
+                s.IdVoznje == 0
+                    ? ""
+                    : s.IdVoznje.ToString()
+                    });
 
+                listView1.Items.Add(item);
             }
 
             listView1.Refresh();

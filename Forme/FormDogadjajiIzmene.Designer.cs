@@ -42,6 +42,8 @@
             label2 = new Label();
             label1 = new Label();
             label8 = new Label();
+            comboBoxDogadjaji = new ComboBox();
+            label7 = new Label();
             SuspendLayout();
             // 
             // buttonIzmeni
@@ -52,7 +54,7 @@
             buttonIzmeni.FlatStyle = FlatStyle.Flat;
             buttonIzmeni.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonIzmeni.ForeColor = SystemColors.ControlDarkDark;
-            buttonIzmeni.Location = new Point(12, 446);
+            buttonIzmeni.Location = new Point(13, 500);
             buttonIzmeni.Margin = new Padding(4, 3, 4, 3);
             buttonIzmeni.Name = "buttonIzmeni";
             buttonIzmeni.Size = new Size(202, 58);
@@ -193,12 +195,35 @@
             label8.Text = "Popunite sve kontrole da biste izmenili postojeće podatke\r\no izabranom događajaju.";
             label8.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // comboBoxDogadjaji
+            // 
+            comboBoxDogadjaji.BackColor = Color.PaleGoldenrod;
+            comboBoxDogadjaji.FormattingEnabled = true;
+            comboBoxDogadjaji.Location = new Point(100, 439);
+            comboBoxDogadjaji.Name = "comboBoxDogadjaji";
+            comboBoxDogadjaji.Size = new Size(488, 31);
+            comboBoxDogadjaji.TabIndex = 45;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label7.ForeColor = SystemColors.ControlDarkDark;
+            label7.Location = new Point(12, 442);
+            label7.Name = "label7";
+            label7.Size = new Size(82, 23);
+            label7.TabIndex = 44;
+            label7.Text = "Vožnja:";
+            label7.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // FormDogadjajiIzmene
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
-            ClientSize = new Size(632, 528);
+            ClientSize = new Size(632, 589);
+            Controls.Add(comboBoxDogadjaji);
+            Controls.Add(label7);
             Controls.Add(buttonIzmeni);
             Controls.Add(textBoxSudar);
             Controls.Add(textBoxNeovlasceniIzlazak);
@@ -239,5 +264,7 @@
         private Label label2;
         private Label label1;
         private Label label8;
+        private ComboBox comboBoxDogadjaji;
+        private Label label7;
     }
 }

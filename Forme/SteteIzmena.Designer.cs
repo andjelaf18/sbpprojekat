@@ -33,7 +33,6 @@
             textBoxProcenaStete = new TextBox();
             textBoxOsiguravajuceKuce = new TextBox();
             textBoxZapisnici = new TextBox();
-            textBoxFoto = new TextBox();
             textBoxID = new TextBox();
             label6 = new Label();
             label5 = new Label();
@@ -43,6 +42,10 @@
             label7 = new Label();
             label8 = new Label();
             openFileDialog1 = new OpenFileDialog();
+            buttonIzaberiFoto = new Button();
+            labelFotografija = new Label();
+            comboBoxVoznja = new ComboBox();
+            label1 = new Label();
             SuspendLayout();
             // 
             // buttonIzmeni
@@ -53,7 +56,7 @@
             buttonIzmeni.FlatStyle = FlatStyle.Flat;
             buttonIzmeni.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonIzmeni.ForeColor = SystemColors.ControlDarkDark;
-            buttonIzmeni.Location = new Point(13, 413);
+            buttonIzmeni.Location = new Point(12, 514);
             buttonIzmeni.Margin = new Padding(4, 3, 4, 3);
             buttonIzmeni.Name = "buttonIzmeni";
             buttonIzmeni.Size = new Size(181, 58);
@@ -65,7 +68,7 @@
             // textBoxOdgovornosti
             // 
             textBoxOdgovornosti.BackColor = Color.PaleGoldenrod;
-            textBoxOdgovornosti.Location = new Point(165, 361);
+            textBoxOdgovornosti.Location = new Point(168, 376);
             textBoxOdgovornosti.Name = "textBoxOdgovornosti";
             textBoxOdgovornosti.Size = new Size(173, 32);
             textBoxOdgovornosti.TabIndex = 56;
@@ -94,14 +97,6 @@
             textBoxZapisnici.Size = new Size(173, 32);
             textBoxZapisnici.TabIndex = 53;
             // 
-            // textBoxFoto
-            // 
-            textBoxFoto.BackColor = Color.PaleGoldenrod;
-            textBoxFoto.Location = new Point(137, 116);
-            textBoxFoto.Name = "textBoxFoto";
-            textBoxFoto.Size = new Size(173, 32);
-            textBoxFoto.TabIndex = 52;
-            // 
             // textBoxID
             // 
             textBoxID.BackColor = Color.PaleGoldenrod;
@@ -115,7 +110,7 @@
             label6.AutoSize = true;
             label6.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label6.ForeColor = SystemColors.ControlDarkDark;
-            label6.Location = new Point(12, 364);
+            label6.Location = new Point(15, 379);
             label6.Name = "label6";
             label6.Size = new Size(147, 23);
             label6.TabIndex = 50;
@@ -198,18 +193,72 @@
             // 
             openFileDialog1.FileName = "openFileDialog1";
             // 
+            // buttonIzaberiFoto
+            // 
+            buttonIzaberiFoto.Anchor = AnchorStyles.Right;
+            buttonIzaberiFoto.FlatAppearance.BorderColor = SystemColors.ControlDarkDark;
+            buttonIzaberiFoto.FlatAppearance.BorderSize = 3;
+            buttonIzaberiFoto.FlatStyle = FlatStyle.Flat;
+            buttonIzaberiFoto.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonIzaberiFoto.ForeColor = SystemColors.ControlDarkDark;
+            buttonIzaberiFoto.Location = new Point(131, 112);
+            buttonIzaberiFoto.Margin = new Padding(4, 3, 4, 3);
+            buttonIzaberiFoto.Name = "buttonIzaberiFoto";
+            buttonIzaberiFoto.Size = new Size(210, 37);
+            buttonIzaberiFoto.TabIndex = 58;
+            buttonIzaberiFoto.Text = "Izaberi fotografiju";
+            buttonIzaberiFoto.UseVisualStyleBackColor = true;
+            buttonIzaberiFoto.Click += buttonIzaberiFoto_Click;
+            // 
+            // labelFotografija
+            // 
+            labelFotografija.AutoSize = true;
+            labelFotografija.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelFotografija.ForeColor = SystemColors.ControlDarkDark;
+            labelFotografija.Location = new Point(356, 107);
+            labelFotografija.Name = "labelFotografija";
+            labelFotografija.Size = new Size(189, 46);
+            labelFotografija.TabIndex = 61;
+            labelFotografija.Text = "Uspešno ste\r\nizabrali fotografiju.";
+            labelFotografija.TextAlign = ContentAlignment.MiddleLeft;
+            labelFotografija.Visible = false;
+            // 
+            // comboBoxVoznja
+            // 
+            comboBoxVoznja.BackColor = Color.PaleGoldenrod;
+            comboBoxVoznja.FormattingEnabled = true;
+            comboBoxVoznja.Location = new Point(100, 434);
+            comboBoxVoznja.Name = "comboBoxVoznja";
+            comboBoxVoznja.Size = new Size(412, 31);
+            comboBoxVoznja.TabIndex = 64;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = SystemColors.ControlDarkDark;
+            label1.Location = new Point(12, 437);
+            label1.Name = "label1";
+            label1.Size = new Size(82, 23);
+            label1.TabIndex = 63;
+            label1.Text = "Vožnja:";
+            label1.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // SteteIzmena
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
-            ClientSize = new Size(483, 483);
+            ClientSize = new Size(553, 584);
+            Controls.Add(comboBoxVoznja);
+            Controls.Add(label1);
+            Controls.Add(labelFotografija);
+            Controls.Add(buttonIzaberiFoto);
             Controls.Add(buttonIzmeni);
             Controls.Add(textBoxOdgovornosti);
             Controls.Add(textBoxProcenaStete);
             Controls.Add(textBoxOsiguravajuceKuce);
             Controls.Add(textBoxZapisnici);
-            Controls.Add(textBoxFoto);
             Controls.Add(textBoxID);
             Controls.Add(label6);
             Controls.Add(label5);
@@ -235,7 +284,6 @@
         private TextBox textBoxProcenaStete;
         private TextBox textBoxOsiguravajuceKuce;
         private TextBox textBoxZapisnici;
-        private TextBox textBoxFoto;
         private TextBox textBoxID;
         private Label label6;
         private Label label5;
@@ -245,5 +293,9 @@
         private Label label7;
         private Label label8;
         private OpenFileDialog openFileDialog1;
+        private Button buttonIzaberiFoto;
+        private Label labelFotografija;
+        private ComboBox comboBoxVoznja;
+        private Label label1;
     }
 }

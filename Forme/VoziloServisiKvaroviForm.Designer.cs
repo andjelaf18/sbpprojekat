@@ -70,7 +70,7 @@
             listViewServisi.FullRowSelect = true;
             listViewServisi.Location = new Point(12, 50);
             listViewServisi.Name = "listViewServisi";
-            listViewServisi.Size = new Size(639, 236);
+            listViewServisi.Size = new Size(1024, 236);
             listViewServisi.TabIndex = 21;
             listViewServisi.UseCompatibleStateImageBehavior = false;
             listViewServisi.View = View.Details;
@@ -78,38 +78,47 @@
             // columnHeader1
             // 
             columnHeader1.Text = "Id servisa";
+            columnHeader1.Width = 120;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Servisni centar";
+            columnHeader2.Width = 160;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Datum prijema";
+            columnHeader3.Width = 170;
             // 
             // columnHeader4
             // 
             columnHeader4.Text = "Datum završetka";
+            columnHeader4.Width = 190;
             // 
             // columnHeader5
             // 
             columnHeader5.Text = "Opis radova";
+            columnHeader5.Width = 140;
             // 
             // columnHeader6
             // 
             columnHeader6.Text = "Zamenjeni delovi";
+            columnHeader6.Width = 200;
             // 
             // columnHeader7
             // 
             columnHeader7.Text = "Status";
+            columnHeader7.Width = 120;
             // 
             // columnHeader8
             // 
             columnHeader8.Text = "Tip";
+            columnHeader8.Width = 120;
             // 
             // columnHeader9
             // 
             columnHeader9.Text = "Troškovi";
+            columnHeader9.Width = 140;
             // 
             // label2
             // 
@@ -131,7 +140,7 @@
             listViewKvar.FullRowSelect = true;
             listViewKvar.Location = new Point(12, 346);
             listViewKvar.Name = "listViewKvar";
-            listViewKvar.Size = new Size(639, 236);
+            listViewKvar.Size = new Size(1024, 236);
             listViewKvar.TabIndex = 23;
             listViewKvar.UseCompatibleStateImageBehavior = false;
             listViewKvar.View = View.Details;
@@ -139,37 +148,44 @@
             // columnHeader19
             // 
             columnHeader19.Text = "Id kvara";
+            columnHeader19.Width = 100;
             // 
             // columnHeader20
             // 
             columnHeader20.Text = "Prijavio problem";
+            columnHeader20.Width = 170;
             // 
             // columnHeader21
             // 
             columnHeader21.Text = "Opis problema";
+            columnHeader21.Width = 170;
             // 
             // columnHeader22
             // 
             columnHeader22.Text = "Procena ozbiljnosti";
+            columnHeader22.Width = 200;
             // 
             // columnHeader23
             // 
             columnHeader23.Text = "Status";
+            columnHeader23.Width = 120;
             // 
             // columnHeader10
             // 
             columnHeader10.Text = "Datum prijave";
+            columnHeader10.Width = 170;
             // 
             // columnHeader11
             // 
             columnHeader11.Text = "Datum otklanjanja";
+            columnHeader11.Width = 170;
             // 
             // VoziloServisiKvaroviForm
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
-            ClientSize = new Size(684, 615);
+            ClientSize = new Size(1075, 615);
             Controls.Add(listViewKvar);
             Controls.Add(label2);
             Controls.Add(listViewServisi);

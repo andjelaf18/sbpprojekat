@@ -25,8 +25,26 @@ namespace IznajmljivanjeVozila.Forme
         public FormDogadjajiIzmene(DogadjajiView d)
         {
             InitializeComponent();
+
             this.dogadjaj = d;
+
+            PopuniComboVoznje();
             popuniPodacima();
+        }
+
+        private void PopuniComboVoznje()
+        {
+            comboBoxDogadjaji.DataSource =
+                DTOManager.VratiVoznjeZaCombo();
+
+            comboBoxDogadjaji.DisplayMember =
+                "Prikaz";
+
+            comboBoxDogadjaji.ValueMember =
+                "Id";
+
+            comboBoxDogadjaji.DropDownStyle =
+                ComboBoxStyle.DropDownList;
         }
 
         private void popuniPodacima()
@@ -39,16 +57,30 @@ namespace IznajmljivanjeVozila.Forme
             textBoxDuzeZadrzavanje.Text = dogadjaj.DuzeZadrzavanje;
             textBoxNeovlasceniIzlazak.Text = dogadjaj.NeovlasceniIzlazak;
             textBoxSudar.Text = dogadjaj.Sudar;
+            comboBoxDogadjaji.SelectedValue = dogadjaj.IdVoznje;
+            comboBoxDogadjaji.Enabled = false;
         }
 
         private void buttonIzmeni_Click(object sender, EventArgs e)
         {
+          
             dogadjaj.NagloKocenje = textBoxNagloKocenje.Text;
             dogadjaj.PrekoracenjeBrzine = textBoxPrekoracenjeBrzine.Text;
             dogadjaj.DuzeZadrzavanje = textBoxDuzeZadrzavanje.Text;
             dogadjaj.NeovlasceniIzlazak = textBoxNeovlasceniIzlazak.Text;
             dogadjaj.Sudar = textBoxSudar.Text;
+            VoznjaCombo izabranaVoznja = comboBoxDogadjaji.SelectedItem as VoznjaCombo;
 
+            if (izabranaVoznja == null)
+            {
+                MessageBox.Show(
+                    "Izaberite vožnju."
+                );
+
+                return;
+            }
+
+            dogadjaj.IdVoznje = izabranaVoznja.Id;
             bool uspesno = DTOManager.IzmeniDogadjaj(dogadjaj);
 
             if (uspesno)

@@ -45,7 +45,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = SystemColors.ControlDarkDark;
-            label1.Location = new Point(33, 9);
+            label1.Location = new Point(12, 9);
             label1.Name = "label1";
             label1.Size = new Size(414, 92);
             label1.TabIndex = 4;
@@ -55,9 +55,9 @@
             // 
             comboBoxKorisnik.BackColor = Color.PaleGoldenrod;
             comboBoxKorisnik.FormattingEnabled = true;
-            comboBoxKorisnik.Location = new Point(453, 29);
+            comboBoxKorisnik.Location = new Point(441, 34);
             comboBoxKorisnik.Name = "comboBoxKorisnik";
-            comboBoxKorisnik.Size = new Size(309, 31);
+            comboBoxKorisnik.Size = new Size(346, 31);
             comboBoxKorisnik.TabIndex = 5;
             comboBoxKorisnik.SelectedIndexChanged += comboBoxKorisnik_SelectedIndexChanged;
             // 
@@ -66,9 +66,9 @@
             listViewNP.BackColor = Color.PaleGoldenrod;
             listViewNP.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5 });
             listViewNP.FullRowSelect = true;
-            listViewNP.Location = new Point(36, 128);
+            listViewNP.Location = new Point(12, 133);
             listViewNP.Name = "listViewNP";
-            listViewNP.Size = new Size(726, 268);
+            listViewNP.Size = new Size(775, 268);
             listViewNP.TabIndex = 6;
             listViewNP.UseCompatibleStateImageBehavior = false;
             listViewNP.View = View.Details;
@@ -76,22 +76,27 @@
             // columnHeader1
             // 
             columnHeader1.Text = "Id";
+            columnHeader1.Width = 50;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Tip plaćanja";
+            columnHeader2.Width = 140;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Status";
+            columnHeader3.Width = 130;
             // 
             // columnHeader4
             // 
             columnHeader4.Text = "Datum dodavanje ograničenja";
+            columnHeader4.Width = 320;
             // 
             // columnHeader5
             // 
             columnHeader5.Text = "Id korisnika";
+            columnHeader5.Width = 140;
             // 
             // buttonDodajNP
             // 
@@ -139,6 +144,7 @@
             Name = "FormNacinPlacanjaKorisnika";
             ShowIcon = false;
             Text = "Način plaćanja";
+            Load += FormNacinPlacanjaKorisnika_Load;
             ResumeLayout(false);
             PerformLayout();
         }

@@ -66,30 +66,37 @@
             // columnHeader1
             // 
             columnHeader1.Text = "Id";
+            columnHeader1.Width = 50;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Naziv";
+            columnHeader2.Width = 170;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Matični broj";
+            columnHeader3.Width = 140;
             // 
             // columnHeader4
             // 
             columnHeader4.Text = "Sedište";
+            columnHeader4.Width = 140;
             // 
             // columnHeader5
             // 
             columnHeader5.Text = "Kontakt osoba";
+            columnHeader5.Width = 200;
             // 
             // columnHeader6
             // 
             columnHeader6.Text = "Ugovorni uslovi";
+            columnHeader6.Width = 170;
             // 
             // columnHeader7
             // 
             columnHeader7.Text = "PIB";
+            columnHeader7.Width = 120;
             // 
             // FormPravnaLicaKorisnik
             // 

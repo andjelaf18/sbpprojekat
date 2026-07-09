@@ -2,6 +2,7 @@
 using IznajmljivanjeVozila.Mapiranja;
 using System;
 using System.Collections.Generic;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 
@@ -108,7 +109,6 @@ namespace IznajmljivanjeVozila
         }
     }
     #endregion
-
 
     #region Vozilo
     public class VoziloView
@@ -238,7 +238,7 @@ namespace IznajmljivanjeVozila
 
     public class PretrazenoVozilo
     {
-        public int Id { get; set; } //?
+        public int Id { get; set; } 
 
         public string Marka { get; set; }
 
@@ -257,8 +257,6 @@ namespace IznajmljivanjeVozila
         public string TipPogona { get; set; }
 
         public string Detalji { get; set; }
-
-
 
         public PretrazenoVozilo()
         {
@@ -279,10 +277,86 @@ namespace IznajmljivanjeVozila
             TipPogona = tipPogona;
             Detalji = detalji;
 
-
         }
 
     }
+
+    public class HibridnoVoziloView : VoziloView
+    {
+        //public int Id { get; set; }
+
+        public double KapacitetBat { get; set; }
+
+        public string TipHibridnogVozila { get; set; }
+
+        public HibridnoVoziloView()
+        {
+
+        }
+
+        public HibridnoVoziloView(HibridnoVozilo hv) : base(hv)
+        {
+           // Id = hv.IdVozila;
+            KapacitetBat = hv.KapacitetBat;
+            TipHibridnogVozila = hv.TipHibridnogVozila;
+        }
+    }
+
+    public class KlasicnoVoziloView : VoziloView
+    {
+       // public int Id { get; set; }
+
+        public double Zapremina { get; set; }
+
+        public double ProsecnaPotrosnja { get; set; }
+
+        public string TipGoriva { get; set; }
+
+        public KlasicnoVoziloView()
+        {
+
+        }
+
+        public KlasicnoVoziloView(KlasicnoVozilo kv) : base(kv)
+        {
+            Id = kv.IdVozila;
+            Zapremina = kv.Zapremina;
+            ProsecnaPotrosnja = kv.ProsecnaPotrosnja;
+            TipGoriva = kv.TipGoriva;
+        }
+    }
+
+    public class ElektricnoVoziloView : VoziloView
+    {
+        //public int Id { get; set; }
+
+        public double KapacitetBat { get; set; }
+
+        public double NivoNapunjenosti { get; set; }
+
+        public string TipPunjenja { get; set; }
+
+        public double Autonomija { get; set; }
+
+        public double BrCiklusaPunjenja { get; set; }
+
+        public ElektricnoVoziloView()
+        {
+
+        }
+
+        public ElektricnoVoziloView(ElektricnoVozilo ev) : base(ev)
+        {
+            Id = ev.IdVozila;
+            KapacitetBat = ev.KapacitetBaterije;
+            NivoNapunjenosti = ev.NivoNapunjenosti;
+            TipPunjenja = ev.TipPunjenja;
+            Autonomija = ev.Autonomija;
+            BrCiklusaPunjenja = ev.BrCiklusaPunjenja;
+        }
+    }
+
+
 
     #endregion
 
@@ -331,6 +405,21 @@ namespace IznajmljivanjeVozila
         }
     }
 
+    public class DostupnostVozilaView
+    {
+        public int IdVozila { get; set; }
+
+        public bool Dostupno { get; set; }
+
+        public string Poruka { get; set; }
+
+        public int? IdKonfliktneRezervacije { get; set; }
+
+        public DateTime? ZauzetoOd { get; set; }
+
+        public DateTime? ZauzetoDo { get; set; }
+    }
+
     public class DogadjajiView
     {
         public int Id { get; set; }
@@ -345,12 +434,14 @@ namespace IznajmljivanjeVozila
 
         public string Sudar { get; set; }
 
+        public int IdVoznje { get; set; } //tokom koje se desio dogadjaj
+
         public DogadjajiView()
         {
 
         }
 
-        public DogadjajiView(Dogadjaji d)
+        public DogadjajiView(Dogadjaji d, int idVoznje)
         {
             Id =d.Id;
             NagloKocenje = d.NagloKocenje;
@@ -358,6 +449,30 @@ namespace IznajmljivanjeVozila
             DuzeZadrzavanje = d.DuzeZadrzavanje;
             NeovlasceniIzlazak = d.NeovlasceniIzlazak;
             Sudar = d.Sudar;
+            IdVoznje = idVoznje; //prosledjeno jer nemamo vezu prema tabelu u bazu 
+        }
+
+        public DogadjajiView(Dogadjaji d) : this(d, 0) //ovako zadrzavamo i stari konstruktor, pre nego
+            //sto smo dodali idVoznje, za svaki slucaj da se ne pokvari nesto
+        {
+        }
+    }
+
+    public class VoznjaCombo //za formu dogadjaji
+    {
+        public int Id { get; set; }
+
+        public string Prikaz { get; set; }
+
+        public VoznjaCombo(Voznja v)
+        {
+            Id = v.IdVoznje;
+
+            Prikaz =
+                $"{v.IdVoznje} - " +
+                $"{v.VremePocetka:dd.MM.yyyy HH:mm} - " +
+                $"{v.PocetnaLokacija} → " +
+                $"{v.ZavrsnaLokacija}";
         }
     }
 
@@ -375,6 +490,8 @@ namespace IznajmljivanjeVozila
 
         public string Odgovornost { get; set; }
 
+        public int IdVoznje { get; set; } //tokom koje se dogodila steta
+
         public SteteView()
         {
 
@@ -388,6 +505,7 @@ namespace IznajmljivanjeVozila
             OsiguravajuceKuce = s.OsiguravajuceKuce;
             ProcenaStete = s.ProcenaStete;
             Odgovornost = s.Odgovornost;
+            IdVoznje = s.Voznja?.IdVoznje ?? 0;
         }
 
     }

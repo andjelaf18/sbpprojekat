@@ -62,30 +62,37 @@
             // columnHeader1
             // 
             columnHeader1.Text = "ID";
+            columnHeader1.Width = 50;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Adresa";
+            columnHeader2.Width = 180;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Broj telefona";
+            columnHeader3.Width = 140;
             // 
             // columnHeader4
             // 
             columnHeader4.Text = "Email";
+            columnHeader4.Width = 210;
             // 
             // columnHeader5
             // 
             columnHeader5.Text = "Status";
+            columnHeader5.Width = 110;
             // 
             // columnHeader6
             // 
             columnHeader6.Text = "Način verifikacije";
+            columnHeader6.Width = 200;
             // 
             // columnHeader7
             // 
             columnHeader7.Text = "Datum registracije";
+            columnHeader7.Width = 200;
             // 
             // menuStrip1
             // 

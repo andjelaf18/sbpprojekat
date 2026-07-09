@@ -72,10 +72,12 @@
             // columnHeader1
             // 
             columnHeader1.Text = "Id";
+            columnHeader1.Width = 70;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Razlog";
+            columnHeader2.Width = 250;
             // 
             // SluzbeneVoznje
             // 

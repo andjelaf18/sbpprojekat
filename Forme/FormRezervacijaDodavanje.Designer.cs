@@ -50,6 +50,7 @@
             label11 = new Label();
             label10 = new Label();
             label9 = new Label();
+            buttonProveriDostupnost = new Button();
             SuspendLayout();
             // 
             // buttonDodaj
@@ -63,7 +64,7 @@
             buttonDodaj.Location = new Point(21, 585);
             buttonDodaj.Margin = new Padding(4, 3, 4, 3);
             buttonDodaj.Name = "buttonDodaj";
-            buttonDodaj.Size = new Size(202, 58);
+            buttonDodaj.Size = new Size(167, 58);
             buttonDodaj.TabIndex = 6;
             buttonDodaj.Text = "Dodaj";
             buttonDodaj.UseVisualStyleBackColor = true;
@@ -296,12 +297,30 @@
             label9.Text = "Korisnik:";
             label9.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // buttonProveriDostupnost
+            // 
+            buttonProveriDostupnost.Anchor = AnchorStyles.Right;
+            buttonProveriDostupnost.FlatAppearance.BorderColor = SystemColors.ControlDarkDark;
+            buttonProveriDostupnost.FlatAppearance.BorderSize = 3;
+            buttonProveriDostupnost.FlatStyle = FlatStyle.Flat;
+            buttonProveriDostupnost.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonProveriDostupnost.ForeColor = SystemColors.ControlDarkDark;
+            buttonProveriDostupnost.Location = new Point(213, 585);
+            buttonProveriDostupnost.Margin = new Padding(4, 3, 4, 3);
+            buttonProveriDostupnost.Name = "buttonProveriDostupnost";
+            buttonProveriDostupnost.Size = new Size(297, 58);
+            buttonProveriDostupnost.TabIndex = 67;
+            buttonProveriDostupnost.Text = "Proveri dostupnost vozila";
+            buttonProveriDostupnost.UseVisualStyleBackColor = true;
+            buttonProveriDostupnost.Click += buttonProveriDostupnost_Click;
+            // 
             // FormRezervacijaDodavanje
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
             ClientSize = new Size(575, 655);
+            Controls.Add(buttonProveriDostupnost);
             Controls.Add(comboBoxVozilo);
             Controls.Add(comboBoxVozac);
             Controls.Add(comboBoxKorisnik);
@@ -360,5 +379,6 @@
         private Label label11;
         private Label label10;
         private Label label9;
+        private Button buttonProveriDostupnost;
     }
 }

@@ -13,11 +13,32 @@ namespace IznajmljivanjeVozila.Forme
     public partial class StetaDodavanje : Form
     {
         SteteView steta;
+        private string putanjaFotografije = string.Empty;
 
         public StetaDodavanje()
         {
             InitializeComponent();
+            
             steta = new SteteView();
+
+            PopuniComboVoznje();
+
+            comboBoxVoznja.SelectedIndex = -1;
+        }
+
+        private void PopuniComboVoznje()
+        {
+            comboBoxVoznja.DataSource =
+                DTOManager.VratiVoznjeZaCombo();
+
+            comboBoxVoznja.DisplayMember =
+                "Prikaz";
+
+            comboBoxVoznja.ValueMember =
+                "Id";
+
+            comboBoxVoznja.DropDownStyle =
+                ComboBoxStyle.DropDownList;
         }
 
         private void buttonDodaj_Click(object sender, EventArgs e)
@@ -35,11 +56,23 @@ namespace IznajmljivanjeVozila.Forme
             if (result == DialogResult.OK)
             {
                 this.steta.Id = int.Parse(textBoxID.Text);
-                this.steta.Fotografije = textBoxFoto.Text;
+                this.steta.Fotografije = putanjaFotografije;
                 this.steta.Zapisnici = textBoxZapisnici.Text;
                 this.steta.OsiguravajuceKuce = textBoxOsiguravajuceKuce.Text;
                 this.steta.ProcenaStete = textBoxProcenaStete.Text;
                 this.steta.Odgovornost = textBoxOdgovornosti.Text;
+                VoznjaCombo izabranaVoznja = comboBoxVoznja.SelectedItem as VoznjaCombo;
+
+                if (izabranaVoznja == null)
+                {
+                    MessageBox.Show(
+                        "Izaberite vožnju tokom koje je nastala šteta."
+                    );
+
+                    return;
+                }
+
+                steta.IdVoznje = izabranaVoznja.Id;
 
                 bool uspesno = DTOManager.DodajStetu(this.steta);
 
@@ -66,6 +99,19 @@ namespace IznajmljivanjeVozila.Forme
                     MessageBoxButtons.OKCancel,
                     MessageBoxIcon.Warning
                 );
+            }
+        }
+
+        private void buttonIzaberiFoto_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "Slike (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp";
+            openFileDialog1.Multiselect = false;
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                putanjaFotografije = openFileDialog1.FileName;
+                labelFotografija.Text = "Uspešno ste izabrali\r\nfotografiju.";
+                labelFotografija.Visible = true;
             }
         }
     }

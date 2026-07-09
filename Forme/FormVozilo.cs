@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IznajmljivanjeVozila.Entiteti;
+using NHibernate;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +20,8 @@ namespace IznajmljivanjeVozila.Forme
             popuniPodacima();
         }
 
+
+
         public void popuniPodacima() //za listView
         {
 
@@ -28,18 +32,19 @@ namespace IznajmljivanjeVozila.Forme
             {
                 ListViewItem item = new ListViewItem(new string[] {
                     v.Id.ToString(),
-                    v.Registracija,
-                    v.VinBr,
-                    v.Marka,
-                    v.Model,
+                    v.Registracija ?? "",
+                    v.VinBr ?? "",
+                    v.Marka ?? "",
+                    v.Model ?? "",
                     v.GodProizvodnje.ToString(),
-                    v.DatumNabavke.ToString(),
-                    v.Status,
-                    v.TipKoriscenja,
+                    v.DatumNabavke.ToShortDateString(),
+                    v.Status ?? "",
+                    v.TipKoriscenja ?? "",
                     v.BrSedista.ToString(),
-                    v.StanjeEnterijera,
-                    v.StanjeEksterijera,
-                    v.DodatnaOprema.ToString()
+                    v.StanjeEnterijera ?? "",
+                    v.StanjeEksterijera ?? "",
+                    v.DodatnaOprema ?? "",
+                    DTOManager.VratiTipPogona(v.Id)
                 });
                 listView1.Items.Add(item);
 
@@ -89,7 +94,8 @@ namespace IznajmljivanjeVozila.Forme
 
         private void buttonDodajVozilo_Click(object sender, EventArgs e)
         {
-            VoziloDodavanjeForm forma = new VoziloDodavanjeForm();
+            ProveraTipaPogonaForm forma = new ProveraTipaPogonaForm();
+
             if (forma.ShowDialog() == DialogResult.OK)
             {
                 popuniPodacima();
@@ -100,14 +106,55 @@ namespace IznajmljivanjeVozila.Forme
         {
             if (listView1.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Izaberite vozilo koje želite da izmenite.");
+                MessageBox.Show(
+                    "Izaberite vozilo koje želite da izmenite.");
                 return;
             }
 
-            int id = int.Parse(listView1.SelectedItems[0].SubItems[0].Text);
-            VoziloView k = DTOManager.VratiVozilo(id);
+            int idVozila = int.Parse(
+                listView1.SelectedItems[0]
+                    .SubItems[0].Text
+            );
 
-            VoziloIzmenaForm forma = new VoziloIzmenaForm(k);
+            string tip =
+                DTOManager.VratiTipPogona(idVozila);
+
+            Form forma;
+
+            switch (tip)
+            {
+                case "Elektricno":
+                    {
+                        ElektricnoVoziloView vozilo =
+                            DTOManager.VratiEVozilo(idVozila);
+
+                        forma = new ElektricnoVoziloIzmena(vozilo);
+                        break;
+                    }
+
+                case "Hibridno":
+                    {
+                        HibridnoVoziloView vozilo =
+                            DTOManager.VratiHVozilo(idVozila);
+
+                        forma = new HibridnoVoziloIzmena(vozilo);
+                        break;
+                    }
+
+                case "Klasicno":
+                    {
+                        KlasicnoVoziloView vozilo =
+                            DTOManager.VratiKVozilo(idVozila);
+
+                        forma = new KlasicnoVoziloIzmena(vozilo);
+                        break;
+                    }
+
+                default:
+                    MessageBox.Show(
+                        "Vozilo nema definisan tip pogona.");
+                    return;
+            }
 
             if (forma.ShowDialog() == DialogResult.OK)
             {
@@ -133,6 +180,31 @@ namespace IznajmljivanjeVozila.Forme
 
             VoziloServisiKvaroviForm form = new VoziloServisiKvaroviForm(idVozila);
             form.ShowDialog();
+        }
+
+        private void buttonDostupnostVozila_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedItems.Count == 0)
+            {
+                MessageBox.Show(
+                    "Izaberite vozilo čiju dostupnost želite da proverite.");
+
+                return;
+            }
+
+            int idVozila = int.Parse(
+                listView1.SelectedItems[0]
+                    .SubItems[0].Text
+            );
+
+            VoziloView vozilo =
+                DTOManager.VratiVozilo(idVozila);
+
+            DostupnostVozila forma =
+                new DostupnostVozila(vozilo);
+
+            forma.ShowDialog(this);
+
         }
     }
 }

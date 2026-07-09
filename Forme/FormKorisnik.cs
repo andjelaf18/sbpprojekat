@@ -108,9 +108,25 @@ namespace IznajmljivanjeVozila.Forme
 
             if (result == DialogResult.OK)
             {
-                DTOManager.obrisiKorisnika(idKorisnika);
-                MessageBox.Show("Brisanje korisnika je uspešno obavljeno!");
-                this.popuniPodacima();
+                bool uspesno =
+    DTOManager.ObrisiKorisnikaSvuda(
+        idKorisnika
+    );
+
+                if (uspesno)
+                {
+                    MessageBox.Show(
+                        "Brisanje korisnika je uspešno obavljeno!"
+                    );
+
+                    popuniPodacima();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Korisnik nije obrisan."
+                    );
+                }
             }
             else
             {

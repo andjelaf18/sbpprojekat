@@ -51,6 +51,7 @@
             label11 = new Label();
             label10 = new Label();
             label9 = new Label();
+            buttonDostupnost = new Button();
             SuspendLayout();
             // 
             // dateTimePickerPocetak
@@ -220,7 +221,7 @@
             buttonIzmeni.Location = new Point(13, 606);
             buttonIzmeni.Margin = new Padding(4, 3, 4, 3);
             buttonIzmeni.Name = "buttonIzmeni";
-            buttonIzmeni.Size = new Size(202, 58);
+            buttonIzmeni.Size = new Size(164, 58);
             buttonIzmeni.TabIndex = 40;
             buttonIzmeni.Text = "Izmeni";
             buttonIzmeni.UseVisualStyleBackColor = true;
@@ -313,12 +314,30 @@
             label9.Text = "Korisnik:";
             label9.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // buttonDostupnost
+            // 
+            buttonDostupnost.Anchor = AnchorStyles.Right;
+            buttonDostupnost.FlatAppearance.BorderColor = SystemColors.ControlDarkDark;
+            buttonDostupnost.FlatAppearance.BorderSize = 3;
+            buttonDostupnost.FlatStyle = FlatStyle.Flat;
+            buttonDostupnost.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            buttonDostupnost.ForeColor = SystemColors.ControlDarkDark;
+            buttonDostupnost.Location = new Point(208, 606);
+            buttonDostupnost.Margin = new Padding(4, 3, 4, 3);
+            buttonDostupnost.Name = "buttonDostupnost";
+            buttonDostupnost.Size = new Size(288, 58);
+            buttonDostupnost.TabIndex = 49;
+            buttonDostupnost.Text = "Proveri dostupnost vozila";
+            buttonDostupnost.UseVisualStyleBackColor = true;
+            buttonDostupnost.Click += buttonDostupnost_Click;
+            // 
             // FormRezervacijaIzmeni
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
             ClientSize = new Size(586, 676);
+            Controls.Add(buttonDostupnost);
             Controls.Add(comboBoxVozilo);
             Controls.Add(comboBoxVozac);
             Controls.Add(comboBoxKorisnik);
@@ -348,7 +367,6 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Izmena registracije";
-            Load += FormRezervacijaIVoznjaIzmeni_Load;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -377,5 +395,6 @@
         private Label label11;
         private Label label10;
         private Label label9;
+        private Button buttonDostupnost;
     }
 }

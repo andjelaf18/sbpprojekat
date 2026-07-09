@@ -50,6 +50,7 @@
             textBoxObracunaCena = new TextBox();
             dateTimePickerP = new DateTimePicker();
             dateTimePickerZ = new DateTimePicker();
+            label12 = new Label();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
@@ -289,12 +290,25 @@
             dateTimePickerZ.Size = new Size(195, 32);
             dateTimePickerZ.TabIndex = 40;
             // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label12.ForeColor = SystemColors.ControlDarkDark;
+            label12.Location = new Point(298, 322);
+            label12.Name = "label12";
+            label12.Size = new Size(22, 23);
+            label12.TabIndex = 41;
+            label12.Text = "h";
+            label12.TextAlign = ContentAlignment.MiddleLeft;
+            // 
             // DodavanjeVoznjeForm
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
             ClientSize = new Size(874, 446);
+            Controls.Add(label12);
             Controls.Add(dateTimePickerZ);
             Controls.Add(dateTimePickerP);
             Controls.Add(textBoxObracunaCena);
@@ -353,5 +367,6 @@
         private TextBox textBoxObracunaCena;
         private DateTimePicker dateTimePickerP;
         private DateTimePicker dateTimePickerZ;
+        private Label label12;
     }
 }

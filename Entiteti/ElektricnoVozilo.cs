@@ -9,11 +9,11 @@ namespace IznajmljivanjeVozila.Entiteti
     public class ElektricnoVozilo: Vozilo
     {
 
-        public virtual int IdVozila { get; set; }
+       // public virtual int IdVozila { get; set; }
 
         public virtual double KapacitetBaterije { get; set; }
 
-        public virtual string NivoNapunjenosti { get; set; }
+        public virtual double NivoNapunjenosti { get; set; }
 
         public virtual string TipPunjenja { get; set; }
 

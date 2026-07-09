@@ -32,12 +32,13 @@
             buttonDodajStetu = new Button();
             listView1 = new ListView();
             columnHeader1 = new ColumnHeader();
-            label1 = new Label();
             columnHeader7 = new ColumnHeader();
             columnHeader8 = new ColumnHeader();
             columnHeader9 = new ColumnHeader();
             columnHeader10 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
+            label1 = new Label();
+            columnHeader3 = new ColumnHeader();
             SuspendLayout();
             // 
             // buttonIzmeniStetu
@@ -47,7 +48,7 @@
             buttonIzmeniStetu.FlatStyle = FlatStyle.Flat;
             buttonIzmeniStetu.Font = new Font("Century Gothic", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonIzmeniStetu.ForeColor = SystemColors.ControlDarkDark;
-            buttonIzmeniStetu.Location = new Point(309, 321);
+            buttonIzmeniStetu.Location = new Point(539, 321);
             buttonIzmeniStetu.Name = "buttonIzmeniStetu";
             buttonIzmeniStetu.Size = new Size(205, 103);
             buttonIzmeniStetu.TabIndex = 13;
@@ -62,7 +63,7 @@
             buttonDodajStetu.FlatStyle = FlatStyle.Flat;
             buttonDodajStetu.Font = new Font("Century Gothic", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonDodajStetu.ForeColor = SystemColors.ControlDarkDark;
-            buttonDodajStetu.Location = new Point(68, 321);
+            buttonDodajStetu.Location = new Point(246, 321);
             buttonDodajStetu.Name = "buttonDodajStetu";
             buttonDodajStetu.Size = new Size(205, 103);
             buttonDodajStetu.TabIndex = 12;
@@ -72,10 +73,12 @@
             // 
             // listView1
             // 
-            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader7, columnHeader8, columnHeader9, columnHeader10, columnHeader2 });
-            listView1.Location = new Point(12, 65);
+            listView1.BackColor = Color.PaleGoldenrod;
+            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader7, columnHeader8, columnHeader9, columnHeader10, columnHeader2, columnHeader3 });
+            listView1.FullRowSelect = true;
+            listView1.Location = new Point(12, 67);
             listView1.Name = "listView1";
-            listView1.Size = new Size(601, 212);
+            listView1.Size = new Size(938, 212);
             listView1.TabIndex = 11;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -83,6 +86,32 @@
             // columnHeader1
             // 
             columnHeader1.Text = "Id";
+            columnHeader1.Width = 50;
+            // 
+            // columnHeader7
+            // 
+            columnHeader7.Text = "Fotografije";
+            columnHeader7.Width = 250;
+            // 
+            // columnHeader8
+            // 
+            columnHeader8.Text = "Zapisnici";
+            columnHeader8.Width = 140;
+            // 
+            // columnHeader9
+            // 
+            columnHeader9.Text = "Osiguravajuće kuće";
+            columnHeader9.Width = 250;
+            // 
+            // columnHeader10
+            // 
+            columnHeader10.Text = "Procena štete";
+            columnHeader10.Width = 170;
+            // 
+            // columnHeader2
+            // 
+            columnHeader2.Text = "Odgovornost";
+            columnHeader2.Width = 200;
             // 
             // label1
             // 
@@ -95,32 +124,17 @@
             label1.TabIndex = 10;
             label1.Text = "U listi možete pregledati informacije o svim štetama.";
             // 
-            // columnHeader7
+            // columnHeader3
             // 
-            columnHeader7.Text = "Fotografije";
-            // 
-            // columnHeader8
-            // 
-            columnHeader8.Text = "Zapisnici";
-            // 
-            // columnHeader9
-            // 
-            columnHeader9.Text = "Osiguravajuće kuće";
-            // 
-            // columnHeader10
-            // 
-            columnHeader10.Text = "Procena štete";
-            // 
-            // columnHeader2
-            // 
-            columnHeader2.Text = "Odgovornost";
+            columnHeader3.Text = "Id vožnje";
+            columnHeader3.Width = 100;
             // 
             // FormRezervacijaIVoznjaSteta
             // 
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
-            ClientSize = new Size(637, 463);
+            ClientSize = new Size(962, 463);
             Controls.Add(buttonIzmeniStetu);
             Controls.Add(buttonDodajStetu);
             Controls.Add(listView1);
@@ -147,5 +161,6 @@
         private ColumnHeader columnHeader9;
         private ColumnHeader columnHeader10;
         private ColumnHeader columnHeader2;
+        private ColumnHeader columnHeader3;
     }
 }

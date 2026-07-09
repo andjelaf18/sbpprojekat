@@ -22,6 +22,7 @@ namespace IznajmljivanjeVozila.Forme
             popuniComboKorisnici();
             popuniComboVozaci();
             popuniComboVozila();
+            popuniPodacima();
         }
         private void popuniComboKorisnici()
         {
@@ -79,16 +80,35 @@ namespace IznajmljivanjeVozila.Forme
                 rezervacija.PlaniranoVremeZavrsetka;
         }
 
+        private bool PokusajPreuzetiIdVozila(out int idVozila)
+        {
+            idVozila = 0;
+
+            if (comboBoxVozilo.SelectedItem
+                is VoziloVoznjaCombo vozilo)
+            {
+                idVozila = vozilo.Id;
+                return true;
+            }
+
+            if (comboBoxVozilo.SelectedValue != null &&
+                int.TryParse(
+                    comboBoxVozilo.SelectedValue.ToString(),
+                    out idVozila))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void buttonIzmeni_Click(object sender, EventArgs e)
         {
-                   KorisnikCombo korisnik =
-                comboBoxKorisnik.SelectedItem as KorisnikCombo;
+            KorisnikCombo korisnik = comboBoxKorisnik.SelectedItem as KorisnikCombo;
 
-            VozacCombo vozac =
-                comboBoxVozac.SelectedItem as VozacCombo;
+            VozacCombo vozac = comboBoxVozac.SelectedItem as VozacCombo;
 
-            VoziloVoznjaCombo vozilo =
-                comboBoxVozilo.SelectedItem as VoziloVoznjaCombo;
+            VoziloVoznjaCombo vozilo = comboBoxVozilo.SelectedItem as VoziloVoznjaCombo;
 
             if (korisnik == null ||
                 vozac == null ||
@@ -118,22 +138,83 @@ namespace IznajmljivanjeVozila.Forme
             rezervacija.PlaniranoVremeZavrsetka =
                 dateTimePickerKraj.Value;
 
-            bool uspesno =
-                DTOManager.IzmeniRezervaciju(rezervacija);
+            if (dateTimePickerKraj.Value <=
+                dateTimePickerPocetak.Value)
+            {
+                MessageBox.Show(
+                    "Vreme završetka mora biti nakon vremena početka.");
+
+                return;
+            }
+
+            if (comboBoxStatus.Text == "Aktivna")
+            {
+                DostupnostVozilaView dostupnost =
+                    DTOManager.ProveriDostupnostVozila(
+                        vozilo.Id,
+                        dateTimePickerPocetak.Value,
+                        dateTimePickerKraj.Value,
+                        rezervacija.Id
+                    );
+
+                if (!dostupnost.Dostupno)
+                {
+                    MessageBox.Show(
+                        dostupnost.Poruka,
+                        "Vozilo nije dostupno",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+
+                    return;
+                }
+            }
+
+            bool uspesno = DTOManager.IzmeniRezervaciju(rezervacija);
 
             if (uspesno)
             {
-                MessageBox.Show(
-                    "Ažuriranje rezervacije je uspešno izvršeno!");
+                MessageBox.Show("Ažuriranje rezervacije je uspešno izvršeno!");
 
                 DialogResult = DialogResult.OK;
                 Close();
             }
+            
         }
 
-        private void FormRezervacijaIVoznjaIzmeni_Load(object sender, EventArgs e)
+        private void buttonDostupnost_Click(object sender, EventArgs e)
         {
-            popuniPodacima();
+            if (!PokusajPreuzetiIdVozila(
+            out int idVozila))
+            {
+                MessageBox.Show(
+                    "Prvo izaberite vozilo.");
+
+                return;
+            }
+
+            if (dateTimePickerKraj.Value <=
+                dateTimePickerPocetak.Value)
+            {
+                MessageBox.Show(
+                    "Vreme završetka mora biti nakon početka.");
+
+                return;
+            }
+
+            VoziloView vozilo =
+                DTOManager.VratiVozilo(idVozila);
+
+            DostupnostVozila forma =
+                new DostupnostVozila(
+                    vozilo,
+                    dateTimePickerPocetak.Value,
+                    dateTimePickerKraj.Value
+                );
+
+            forma.ShowDialog(this);
+
         }
+
     }
 }

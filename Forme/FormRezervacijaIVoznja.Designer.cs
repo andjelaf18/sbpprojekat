@@ -58,7 +58,7 @@
             buttonDodaj.FlatStyle = FlatStyle.Flat;
             buttonDodaj.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonDodaj.ForeColor = SystemColors.ControlDarkDark;
-            buttonDodaj.Location = new Point(553, 92);
+            buttonDodaj.Location = new Point(837, 149);
             buttonDodaj.Margin = new Padding(4, 3, 4, 3);
             buttonDodaj.Name = "buttonDodaj";
             buttonDodaj.Size = new Size(202, 58);
@@ -75,7 +75,7 @@
             buttonIzmeni.FlatStyle = FlatStyle.Flat;
             buttonIzmeni.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonIzmeni.ForeColor = SystemColors.ControlDarkDark;
-            buttonIzmeni.Location = new Point(553, 205);
+            buttonIzmeni.Location = new Point(837, 262);
             buttonIzmeni.Margin = new Padding(4, 3, 4, 3);
             buttonIzmeni.Name = "buttonIzmeni";
             buttonIzmeni.Size = new Size(202, 58);
@@ -92,7 +92,7 @@
             buttonObrisi.FlatStyle = FlatStyle.Flat;
             buttonObrisi.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonObrisi.ForeColor = SystemColors.ControlDarkDark;
-            buttonObrisi.Location = new Point(553, 315);
+            buttonObrisi.Location = new Point(837, 372);
             buttonObrisi.Margin = new Padding(4, 3, 4, 3);
             buttonObrisi.Name = "buttonObrisi";
             buttonObrisi.Size = new Size(202, 58);
@@ -103,10 +103,12 @@
             // 
             // listView1
             // 
+            listView1.BackColor = Color.PaleGoldenrod;
             listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader8, columnHeader9, columnHeader10, columnHeader11, columnHeader12, columnHeader2, columnHeader3, columnHeader4, columnHeader5 });
-            listView1.Location = new Point(23, 92);
+            listView1.FullRowSelect = true;
+            listView1.Location = new Point(12, 92);
             listView1.Name = "listView1";
-            listView1.Size = new Size(486, 281);
+            listView1.Size = new Size(800, 378);
             listView1.TabIndex = 8;
             listView1.UseCompatibleStateImageBehavior = false;
             listView1.View = View.Details;
@@ -114,42 +116,52 @@
             // columnHeader1
             // 
             columnHeader1.Text = "Id";
+            columnHeader1.Width = 50;
             // 
             // columnHeader8
             // 
             columnHeader8.Text = "Id korisnika";
+            columnHeader8.Width = 120;
             // 
             // columnHeader9
             // 
             columnHeader9.Text = "Id vozača";
+            columnHeader9.Width = 120;
             // 
             // columnHeader10
             // 
             columnHeader10.Text = "Id vozila";
+            columnHeader10.Width = 120;
             // 
             // columnHeader11
             // 
             columnHeader11.Text = "Planirana lokacija preuzimanja";
+            columnHeader11.Width = 200;
             // 
             // columnHeader12
             // 
             columnHeader12.Text = "Planirana lokacija vraćanja";
+            columnHeader12.Width = 200;
             // 
             // columnHeader2
             // 
             columnHeader2.Text = "Tip";
+            columnHeader2.Width = 140;
             // 
             // columnHeader3
             // 
             columnHeader3.Text = "Status";
+            columnHeader3.Width = 140;
             // 
             // columnHeader4
             // 
             columnHeader4.Text = "Planirano vreme početka";
+            columnHeader4.Width = 300;
             // 
             // columnHeader5
             // 
             columnHeader5.Text = "Planirano vreme završetka";
+            columnHeader5.Width = 300;
             // 
             // menuStrip1
             // 
@@ -159,7 +171,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { vožnjeToolStripMenuItem, događajiToolStripMenuItem, šteteToolStripMenuItem, službenaVoznjaToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(768, 31);
+            menuStrip1.Size = new Size(1052, 31);
             menuStrip1.TabIndex = 9;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -196,7 +208,7 @@
             AutoScaleDimensions = new SizeF(12F, 23F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(255, 255, 128);
-            ClientSize = new Size(768, 482);
+            ClientSize = new Size(1052, 482);
             Controls.Add(listView1);
             Controls.Add(buttonObrisi);
             Controls.Add(buttonIzmeni);
